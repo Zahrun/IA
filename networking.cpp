@@ -5,8 +5,10 @@
  *      Author: aroun
  */
 
-void connect(){
+#include "networking.h"
 
+void connect(string msg)
+{
+	cout << "connect says: " << msg << endl;
 }
-
 

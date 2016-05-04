@@ -9,13 +9,9 @@
 #include <iostream>
 #include <thread>
 #include "networking.h"
+#include "genetic.h"
 
 using namespace std;
-
-void task1(string msg)
-{
-    cout << "task1 says: " << msg;
-}
 
 int main(int argc, char * argv[]) {
 	if (argc != 3){
@@ -26,8 +22,10 @@ int main(int argc, char * argv[]) {
 	cout << "!!! Lancement de l'IA algo génétique !!!" << endl;
 	cout << "L'IA va se connecter à la machine " << argv[1] << " sur le port " << argv[2] << "." << endl;
 
-	thread t1(task1, "Hello");
-	t1.join();
+	thread tConnect(connect, "Hello");
+	tConnect.join();
+	thread tGenetic(genetic, "Test");
+	tGenetic.join();
 
 	return 0;
 }

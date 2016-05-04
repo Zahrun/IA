@@ -8,7 +8,11 @@
 #ifndef NETWORKING_H_
 #define NETWORKING_H_
 
+#include <iostream>
 
+using namespace std;
+
+void connect(string);
 
 
 
