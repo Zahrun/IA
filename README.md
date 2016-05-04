@@ -1,8 +1,8 @@
 # IA
 
 ##### Instructions pour pouvoir jouer avec la dernière version du prof
-sudo apt-get install ocaml ocaml-findlib libcurses-ocaml-dev xterm
-virer ce qu'il y a devant ocamlfind et ocamlbuild dans client/Makefile et server/Makefile
+sudo apt-get install ocaml ocaml-findlib libcurses-ocaml-dev xterm  
+virer ce qu'il y a devant ocamlfind et ocamlbuild dans client/Makefile et server/Makefile  
 sudo ln /bin/bash /usr/bin/bash
 
 script/execute-ia-player.sh 1
