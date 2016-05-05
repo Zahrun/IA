@@ -12,6 +12,7 @@
 #include <sys/socket.h> //socket
 #include <netinet/in.h>
 #include <strings.h>	//bzero, bcopy
+#include <sstream>		//string streams
 #include <unistd.h>		//read, write
 #include <netdb.h>		//gethostbyname
 

@@ -7,14 +7,65 @@
 
 #include "networking.h"
 
+#define BUFFER_SIZE 2048
+#define NUMBER_OF_WORDS 2
+
+const string WORDS[NUMBER_OF_WORDS] = {"width","get_action"};
+
+int recognizeWord(string word){
+	for (int i = 0; i<NUMBER_OF_WORDS; i++){
+		if (word == WORDS[i]){
+			return i;
+		}
+	}
+	return 0;
+}
+
+void readDescription(char * buffer){
+	cout << "*** Parsing message :" << endl;
+	istringstream issBuf(buffer), issLine;
+	string line, word;
+	while (getline(issBuf,line) > 0){
+		issLine.str(line);
+		while(issLine >> word) {
+			cout << word << " ";
+		}
+		cout << endl;
+		issLine.clear();
+	}
+	issBuf.clear();
+	cout << "*** Message parsed" << endl;
+}
+
+void readMessage(char * buffer){
+	cout << "*** Parsing first word of message" << endl;
+	istringstream issBuf(buffer);
+	string firstWord;
+	if (!(issBuf >> firstWord)){
+		error("buffer vide !!!");
+	}
+	switch (recognizeWord(firstWord)){
+	case 1 : // width
+		cout << "premier mot : width donc message de description" << endl;
+		break;
+	case 2 : // get_action
+		cout << "premier mot : get_action" << endl;
+		break;
+	default :
+		cout << "message non reconnu !!!" << endl;
+	}
+	cout << "*** First word of message parsed" << endl;
+
+}
+
 void connexion(char * host, int port)
 {
 	int sockfd;
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
-	char buffer[256];
+	char buffer[BUFFER_SIZE];
 
-	cout << "Tentative de connection a " << host << ":" << port << endl;
+	cout << "Tentative de connexion a " << host << ":" << port << endl;
 
 	// create socket
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -38,10 +89,19 @@ void connexion(char * host, int port)
 		error("ERROR connecting");
 	cout << "Connexion au serveur réussie !!!" << endl;
 	// lecture messages
-	while(1){
-		if(read(sockfd,buffer,255) < 0)
+	int n;
+
+	while (1){
+		n =read(sockfd,buffer,BUFFER_SIZE - 1);
+		if (n < 0)
 			error("ERROR reading from socket");
-		printf("%s\n",buffer);
+		if (n == 0){
+			cout << "fin de la lecture: lu = 0" << endl;
+			break;
+		}
+		readMessage(buffer);
+		cout << "reçu :\"" << buffer << "\"" << endl;
+		bzero(buffer, 256);
 	}
 	close(sockfd);
 }
