@@ -20,7 +20,7 @@ void genetic(string msg){
 			error("Erreur oppération P sur sem");
 		}
 		cout << "IA : prise de décision..." << endl;
-		sleep(1); // simulation de décision d'action
+		usleep(500000); // simulation de décision d'action
 		// prévenir que la décision est prise
 		if (sem_post(&sem_attente_decision_IA)){
 			error("Erreur oppération V sur sem");
