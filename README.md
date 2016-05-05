@@ -1,7 +1,7 @@
 # IA
 
 ##### Pour compiler
-g++ IA.cpp -std=c++0x -pthread -o IA
+g++ \*.cpp -std=c++0x -pthread -o IA
 
 pour utiliser eclipse : https://www.fayewilliams.com/2015/04/14/c11-threads-dont-work-in-eclipse-luna/
 
