@@ -5,6 +5,10 @@ g++ \*.cpp -std=c++0x -pthread -o IA
 
 pour utiliser eclipse : https://www.fayewilliams.com/2015/04/14/c11-threads-dont-work-in-eclipse-luna/
 
+##### Pour éxecuter (sans le serveur ni le jeu, etc...)
+./IA localhost 2042
+executable	nomserveur  port
+
 ##### Instructions pour lancer le jeu avec notre IA
 1) Faire un raccourcis de l'éxecutable de notre projet dans le dossier empire-captain (ou le copier)  
 ln -s /wathever/IA /wathever/empire-captain/IA  
