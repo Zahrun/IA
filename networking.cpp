@@ -8,13 +8,21 @@
 #include "networking.h"
 
 #define BUFFER_SIZE 2048
-#define NUMBER_OF_WORDS 2
+#define NUMBER_OF_WORDS 3
 
-const string WORDS[NUMBER_OF_WORDS] = {"width","get_action"};
+const string WORDS[NUMBER_OF_WORDS] = {"width","get_action","set_visible"};
 
 int sockfd;
 
 void sendAction(){
+	if (sem_post(&sem_attente_get_action)){
+		error("Erreur oppération V sur sem");
+	}
+	cout << "Ntwrk : en attente de l'action à envoyer..." << endl;
+	if (sem_wait(&sem_attente_decision_IA)){
+		error("Erreur oppération P sur sem");
+	}
+
 	write(sockfd, "end_turn\n", 9);
 }
 
@@ -68,6 +76,14 @@ void readMessage(char * buffer){
 
 void connexion(char * host, int port)
 {
+	// synchro initiale
+	cout << "Synchronisation des threads..." << endl;
+	if (sem_wait(&sem_attente_decision_IA)){
+		error("Erreur oppération P sur sem");
+	}
+	cout << "Threads synchronisés" << endl;
+
+
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
 	char buffer[BUFFER_SIZE];

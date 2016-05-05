@@ -22,9 +22,11 @@ int main(int argc, char * argv[]) {
 	cout << "!!! Lancement de l'IA algo génétique !!!" << endl;
 	cout << "L'IA va se connecter à la machine " << argv[1] << " sur le port " << argv[2] << "." << endl;
 
+	init_semaphores();
+
 	thread tConnect(connexion, argv[1], stoi(argv[2]));
-	tConnect.join();
 	thread tGenetic(genetic, "Test");
+	tConnect.join();
 	tGenetic.join();
 
 	return 0;
