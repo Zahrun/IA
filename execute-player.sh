@@ -9,8 +9,8 @@ make_empire
 
 # Demarrage des programmes.
 launch_xterm "./empire-server/Main.native -sport ${SPORT} 2>&1 | tee out_S" SPID 0 0
-launch_xterm "./empire-client/Main.native -sport ${SPORT}" PPID1 470 0
-launch_xterm "./empire-client/Main.native -sport ${SPORT}" PPID2 470 370
+launch_xterm "./empire-client/Main.native -sport ${SPORT}" PPID1 485 0
+launch_xterm "./empire-client/Main.native -sport ${SPORT}" PPID2 485 370
 
 PIDS="${SPID} ${PPID1} ${PPID2}"
 
