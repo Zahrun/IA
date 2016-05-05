@@ -12,6 +12,12 @@
 
 const string WORDS[NUMBER_OF_WORDS] = {"width","get_action"};
 
+int sockfd;
+
+void sendAction(){
+	write(sockfd, "end_turn\n", 9);
+}
+
 int recognizeWord(string word){
 	for (int i = 0; i<NUMBER_OF_WORDS; i++){
 		if (word == WORDS[i]){
@@ -45,14 +51,16 @@ void readMessage(char * buffer){
 		error("buffer vide !!!");
 	}
 	switch (recognizeWord(firstWord)){
-	case 1 : // width
-		cout << "premier mot : width donc message de description" << endl;
+	case 0 : // width
+		cout << "premier mot : width" << endl;
+		readDescription(buffer);
 		break;
-	case 2 : // get_action
+	case 1 : // get_action
 		cout << "premier mot : get_action" << endl;
+		sendAction();
 		break;
 	default :
-		cout << "message non reconnu !!!" << endl;
+		cout << "message non reconnu : \"" << firstWord << "\" !!!" << endl;
 	}
 	cout << "*** First word of message parsed" << endl;
 
@@ -60,7 +68,6 @@ void readMessage(char * buffer){
 
 void connexion(char * host, int port)
 {
-	int sockfd;
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
 	char buffer[BUFFER_SIZE];
