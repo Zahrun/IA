@@ -8,7 +8,7 @@
 #ifndef GENETIC_H_
 #define GENETIC_H_
 
-#include <iostream>
+#include "globals.h"
 
 using namespace std;
 

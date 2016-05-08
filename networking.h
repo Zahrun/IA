@@ -8,11 +8,11 @@
 #ifndef NETWORKING_H_
 #define NETWORKING_H_
 
-#include <iostream>
+#include "globals.h"
 
 using namespace std;
 
-void connect(string);
+void connexion(char * host, int port);
 
 
 
