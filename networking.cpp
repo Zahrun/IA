@@ -1,18 +1,45 @@
 /*
  * networking.cpp
  *
- *  Created on: 4 mai 2016
- *      Author: aroun
  */
 
 #include "networking.h"
 
 #define BUFFER_SIZE 2048
-#define NUMBER_OF_WORDS 3
+#define NUMBER_OF_WORDS 14
+#define LONGUEURE_MAP 50
+#define LARGEUR_MAP 50
 
-const string WORDS[NUMBER_OF_WORDS] = {"width","get_action","set_visible"};
+const string WORDS[NUMBER_OF_WORDS] = {"width","get_action","set_visible","delete_piece","enter_piece","enter_city","leave_piece","leave_city","leave_terrain","lose_city","move","invade","error","create_piece"};
 
 int sockfd;
+
+struct case_t{
+	char unite ; // 'A' 'F' 'O' etc ( ' ' for nothing ) on garde les notations symboliques de la GUI de base
+	int terrain ; // mer => 0 et terre => 1
+	int visible ; // pas découvert => -1, découvert mais plus à jour => 0, découvert et visible (actualisé) => 1
+	int owner ; // Joueur => 0, Adversaire => 1, -1 si à personne ( ville )
+	int id ; // piece_id ou city_id
+	int transport ; // nombre d'unités transportées ( pour ville ou Transport )
+};
+
+case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
+// Matrice de cases où on va enregistrer tout ce que nous retourne le serveur.
+
+// TODO : init cases!
+
+void initCases(){
+        for (int i = 0; i < LONGUEURE_MAP; i++){
+            for (int j = 0; j < LARGEUR_MAP; j++){
+                cases[i][j].unite = ' ';
+                cases[i][j].terrain = -1;
+                cases[i][j].visible = -1;
+                cases[i][j].owner = -1;
+                cases[i][j].id = -1;
+                cases[i][j].transport = -1;
+             }
+        }               
+}
 
 void sendAction(){
 	if (sem_post(&sem_attente_get_action)){
@@ -55,7 +82,19 @@ void readMessage(char * buffer){
 	cout << "*** Parsing first word of message" << endl;
 	istringstream issBuf(buffer);
 	string firstWord;
-	if (!(issBuf >> firstWord)){
+	int x;
+	int y;
+	string tile; // ground OR water
+	string unite;
+	int id;
+	int owner;
+	char piece_symbol;
+	string piece_type;
+
+	/* On va mettre chaque paramètres ( integers ) dans un tableau */
+
+
+	if (!(issBuf >> firstWord)){ // cpp : >> on a stream reads one word at a time
 		error("buffer vide !!!");
 	}
 	switch (recognizeWord(firstWord)){
@@ -67,6 +106,47 @@ void readMessage(char * buffer){
 		cout << "premier mot : get_action" << endl;
 		sendAction();
 		break;
+	case 2 : // set_visible
+		/* il y a 4 façons d'uliser set_visible
+			-> avec 4 / 5 / 6 ou 8 params complémentaires */
+	
+		issBuf >> y; // peut être l'inverse entre x et y!
+		issBuf >> x;
+		issBuf >> tile;
+		if (tile=="ground"){
+			cases[y][x].terrain=1;}
+		else if (tile=="water"){
+			cases[y][x].terrain=0;}
+		else { cout << "problem reading tile" << endl;}
+
+		issBuf >> unite;
+		if (unite=="none"){
+			cases[y][x].unite=' ';
+			if (cases[y][x].visible == -1) { // terrain n'était pas découvert du tout
+				cases[y][x].visible = 1;}
+			else if ( cases[y][x].visible == 0) { // terrain était en ombre
+				cases[y][x].visible = 1; }
+			else { // terrain était actualisé et passe en ombre
+				cases[y][x].visible = 0; }
+		}
+		else if (unite=="city"){ // ville prise par aucun joueur
+			cases[y][x].unite='O';
+			cases[y][x].owner=-1;}
+		else if (unite=="city_owned"){ // ville prise par un joueur
+			cases[y][x].unite='O';
+			issBuf >> id;
+			cases[y][x].id=id;
+			issBuf >> owner; // TODO : check format of "owner" !
+			cases[y][x].owner=owner;}
+		else if (unite=="piece"){
+			issBuf >> owner; // TODO : check format of "owner" !
+			cases[y][x].owner=owner;
+			issBuf >> piece_symbol; // TODO : check si symbole à bien été implanté comme prévu dans les NOTES
+			cases[y][x].unite=piece_symbol;
+			issBuf >> id;
+			cases[y][x].id=id;
+			issBuf >> piece_type;} // pas besoin ( si symbole fonctionne... )	
+			break;
 	default :
 		cout << "message non reconnu : \"" << firstWord << "\" !!!" << endl;
 	}
@@ -113,6 +193,8 @@ void connexion(char * host, int port)
 	cout << "Connexion au serveur réussie !!!" << endl;
 	// lecture messages
 	int n;
+
+	initCases();
 
 	while (1){
 		n =read(sockfd,buffer,BUFFER_SIZE - 1);
