@@ -28,3 +28,6 @@ IA
 *.exe
 *.out
 *.app
+
+#MakeFile
+Makefile
