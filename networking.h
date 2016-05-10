@@ -13,7 +13,10 @@
 using namespace std;
 
 void connexion(char * host, int port);
-
+void readDescription(char * buffer);
+int recognizeWord(string word);
+void sendAction(string action);
+void readMessage(char * buffer);
 
 
 #endif /* NETWORKING_H_ */

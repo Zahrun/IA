@@ -14,7 +14,7 @@ const string WORDS[NUMBER_OF_WORDS] = {"width","get_action","set_visible"};
 
 int sockfd;
 
-void sendAction(){
+void sendAction(string action){
 	if (sem_post(&sem_attente_get_action)){
 		error("Erreur oppération V sur sem");
 	}
@@ -23,7 +23,7 @@ void sendAction(){
 		error("Erreur oppération P sur sem");
 	}
 
-	write(sockfd, "end_turn\n", 9);
+	write(sockfd, action, 9);
 }
 
 int recognizeWord(string word){
