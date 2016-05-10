@@ -29,16 +29,44 @@ case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
 // TODO : init cases!
 
 void initCases(){
-        for (int i = 0; i < LONGUEURE_MAP; i++){
-            for (int j = 0; j < LARGEUR_MAP; j++){
-                cases[i][j].unite = ' ';
-                cases[i][j].terrain = -1;
-                cases[i][j].visible = -1;
-                cases[i][j].owner = -1;
-                cases[i][j].id = -1;
-                cases[i][j].transport = -1;
-             }
-        }               
+    for (int i = 0; i < LONGUEURE_MAP; i++){
+        for (int j = 0; j < LARGEUR_MAP; j++){
+            cases[i][j].unite = ' ';
+            cases[i][j].terrain = -1;
+            cases[i][j].visible = -1;
+            cases[i][j].owner = -1;
+            cases[i][j].id = -1;
+            cases[i][j].transport = 0;
+         }
+    }               
+}
+
+// peut être vaudrait-il mieux garder un vector pour lier chaque id pièce à sa position!
+void find_and_destroy(int id_piece){
+	int found=0;
+    for (int i = 0; i < LONGUEURE_MAP; i++){
+        for (int j = 0; j < LARGEUR_MAP; j++){
+            if ( cases[i][j].unite != '0'  and cases[i][j].id == id_piece ){
+            	cases[i][j].unite= ' ';
+            	cases[i][j].id = -1;
+            	found=1;
+            	break;}
+         }
+         if (found==1){break;} // ça sert à rien de continuer de chercher
+    } 	
+}
+
+find_and_contain_transporter(int id_container, int diff){ // diff vaut 1 ou -1 selon si la pièce entre ou sort du container
+	int found=0;
+    for (int i = 0; i < LONGUEURE_MAP; i++){
+        for (int j = 0; j < LARGEUR_MAP; j++){
+            if ( cases[i][j].unite != 'T'  and cases[i][j].id == id_container ){
+            	cases[i][j].transport=cases[i][j].transport+diff;
+            	found=1;
+            	break;}
+         }
+         if (found==1){break;} // ça sert à rien de continuer de chercher
+    } 
 }
 
 void sendAction(){
@@ -87,6 +115,8 @@ void readMessage(char * buffer){
 	string tile; // ground OR water
 	string unite;
 	int id;
+	int id_container;
+	int id_city;
 	int owner;
 	char piece_symbol;
 	string piece_type;
@@ -102,10 +132,12 @@ void readMessage(char * buffer){
 		cout << "premier mot : width" << endl;
 		readDescription(buffer);
 		break;
+		
 	case 1 : // get_action
 		cout << "premier mot : get_action" << endl;
 		sendAction();
 		break;
+		
 	case 2 : // set_visible
 		/* il y a 4 façons d'uliser set_visible
 			-> avec 4 / 5 / 6 ou 8 params complémentaires */
@@ -146,7 +178,50 @@ void readMessage(char * buffer){
 			issBuf >> id;
 			cases[y][x].id=id;
 			issBuf >> piece_type;} // pas besoin ( si symbole fonctionne... )	
-			break;
+		break;
+		
+	case 3 : // delete_piece
+		issBuf >> id ;
+		find_and_destroy(id);	
+		break;
+
+	case 4 : // enter_piece
+		issBuf >> id ;
+		issBuf >> id_container ;
+		find_and_contain_transporter(id_container,1);	
+		break;	
+
+	case 5 : // enter_city
+		issBuf >> id ;
+		issBuf >> id_city ;
+		find_and_contain_transporter(id_city,1);	
+		break;
+		
+	case 6 : // leave_piece
+		issBuf >> id ;
+		issBuf >> id_container ;
+		find_and_contain_transporter(id_container,-1);	
+		break;
+
+	case 7 : // leave_city
+		issBuf >> id ;
+		issBuf >> id_city ;
+		find_and_contain_transporter(id_city,-1);	
+		break;
+		
+	case 8 : // leave_terrain
+		issBuf >> id;
+		issBuf >> y;
+		issBuf >> x;			
+		cases[y][x].id=-1;
+		cases[y][x].unite=' ';
+		cases[y][x].owner=-1;
+		cases[y][x].transport=0;		
+		break;
+		
+/* TODO : from lose_city to create_piece
+TODO : vérifier que tous les formats ( typages ) sont corrects ! */
+		
 	default :
 		cout << "message non reconnu : \"" << firstWord << "\" !!!" << endl;
 	}
