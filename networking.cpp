@@ -1,73 +1,31 @@
 /*
  * networking.cpp
  *
+ TODO Alexis : 	- Mettre fichier de fts à part ( en cours )
+ 				- Array pour enregistrer les types/ids des pièces dans un container ( Ville ou Transporter ) ?
+ 				- Check formats "owner" et "symboles"
+ 				- Faire un vector de toutes nos villes actuelles + un autre vector de toutes nos pièces actuelles
+ 					( type + id + pos? )
+ 					-> Comme ça l'algo gén pourra se servir de ça.
+ 
  */
 
 #include "networking.h"
 
+#include "tiles.h"
+
+
 #define BUFFER_SIZE 2048
 #define NUMBER_OF_WORDS 14
-#define LONGUEURE_MAP 50
-#define LARGEUR_MAP 50
 
-const string WORDS[NUMBER_OF_WORDS] = {"width","get_action","set_visible","delete_piece","enter_piece","enter_city","leave_piece","leave_city","leave_terrain","lose_city","move","invade","error","create_piece"};
+
+const string WORDS[NUMBER_OF_WORDS] = {"width","get_action","set_visible","delete_piece","enter_piece","enter_city","leave_piece","leave_city","leave_terrain","lose_city","move","invade_city","error","create_piece"};
 
 int sockfd;
 
-struct case_t{
-	char unite ; // 'A' 'F' 'O' etc ( ' ' for nothing ) on garde les notations symboliques de la GUI de base
-	int terrain ; // mer => 0 et terre => 1
-	int visible ; // pas découvert => -1, découvert mais plus à jour => 0, découvert et visible (actualisé) => 1
-	int owner ; // Joueur => 0, Adversaire => 1, -1 si à personne ( ville )
-	int id ; // piece_id ou city_id
-	int transport ; // nombre d'unités transportées ( pour ville ou Transport )
-};
 
-case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
+//case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
 // Matrice de cases où on va enregistrer tout ce que nous retourne le serveur.
-
-// TODO : init cases!
-
-void initCases(){
-    for (int i = 0; i < LONGUEURE_MAP; i++){
-        for (int j = 0; j < LARGEUR_MAP; j++){
-            cases[i][j].unite = ' ';
-            cases[i][j].terrain = -1;
-            cases[i][j].visible = -1;
-            cases[i][j].owner = -1;
-            cases[i][j].id = -1;
-            cases[i][j].transport = 0;
-         }
-    }               
-}
-
-// peut être vaudrait-il mieux garder un vector pour lier chaque id pièce à sa position!
-void find_and_destroy(int id_piece){
-	int found=0;
-    for (int i = 0; i < LONGUEURE_MAP; i++){
-        for (int j = 0; j < LARGEUR_MAP; j++){
-            if ( cases[i][j].unite != '0'  and cases[i][j].id == id_piece ){
-            	cases[i][j].unite= ' ';
-            	cases[i][j].id = -1;
-            	found=1;
-            	break;}
-         }
-         if (found==1){break;} // ça sert à rien de continuer de chercher
-    } 	
-}
-
-find_and_contain_transporter(int id_container, int diff){ // diff vaut 1 ou -1 selon si la pièce entre ou sort du container
-	int found=0;
-    for (int i = 0; i < LONGUEURE_MAP; i++){
-        for (int j = 0; j < LARGEUR_MAP; j++){
-            if ( cases[i][j].unite != 'T'  and cases[i][j].id == id_container ){
-            	cases[i][j].transport=cases[i][j].transport+diff;
-            	found=1;
-            	break;}
-         }
-         if (found==1){break;} // ça sert à rien de continuer de chercher
-    } 
-}
 
 void sendAction(){
 	if (sem_post(&sem_attente_get_action)){
@@ -163,12 +121,12 @@ void readMessage(char * buffer){
 		}
 		else if (unite=="city"){ // ville prise par aucun joueur
 			cases[y][x].unite='O';
-			cases[y][x].owner=-1;}
+			cases[y][x].owner=0;}
 		else if (unite=="city_owned"){ // ville prise par un joueur
 			cases[y][x].unite='O';
 			issBuf >> id;
 			cases[y][x].id=id;
-			issBuf >> owner; // TODO : check format of "owner" !
+			issBuf >> owner; // TODO : check format of "owner" ! pour le moment : -1 pour adv et 1 pour joueur
 			cases[y][x].owner=owner;}
 		else if (unite=="piece"){
 			issBuf >> owner; // TODO : check format of "owner" !
@@ -215,17 +173,47 @@ void readMessage(char * buffer){
 		issBuf >> x;			
 		cases[y][x].id=-1;
 		cases[y][x].unite=' ';
-		cases[y][x].owner=-1;
+		cases[y][x].owner=0;
 		cases[y][x].transport=0;		
 		break;
+
+	case 9 : // lose_city
+		issBuf >> id_city;
+		change_state_city(id_city);
+		break;
 		
-/* TODO : from lose_city to create_piece
-TODO : vérifier que tous les formats ( typages ) sont corrects ! */
+	case 10 : //move
+		// TODO, besoin ou pas?
+		cout << "move not handled yet..." << endl;
+		break;
 		
+	case 11 : // invade_city
+		issBuf >> id_city;
+		issBuf >> y;
+		issBuf >> x;		
+		cases[y][x].id=id_city;
+		cases[y][x].unite='0';
+		cases[y][x].owner=1;
+		cases[y][x].transport=1; // une unité dans la ville ( celle qui vient de la prendre )	
+		
+	case 12 : // error
+		cout << "Error in readMessage : " << issBuf << endl;
+		break;
+		
+	case 13 : // create_piece
+		issBuf >> id;
+		issBuf >> piece_type;
+		issBuf >> piece_symbol;
+		issBuf >> id_city;
+		new_piece( id_city );
+		
+		
+		break;		
+	
 	default :
 		cout << "message non reconnu : \"" << firstWord << "\" !!!" << endl;
 	}
-	cout << "*** First word of message parsed" << endl;
+	cout << "One message parsed" << endl;
 
 }
 
