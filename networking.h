@@ -12,10 +12,12 @@
 
 using namespace std;
 
+
+
 void connexion(char * host, int port);
 void readDescription(char * buffer);
 int recognizeWord(string word);
-void sendAction(string action);
+void sendAction();
 void readMessage(char * buffer);
 
 

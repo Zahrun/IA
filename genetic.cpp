@@ -7,6 +7,9 @@
 
 #include "genetic.h"
 
+int turn = 0;
+vector<const char*> list_constant;
+
 void genetic(string msg){
 	// synchronisation initiale des threads
 	if (sem_post(&sem_attente_decision_IA)){
@@ -21,10 +24,14 @@ void genetic(string msg){
 		}
 		cout << "IA : prise de décision..." << endl;
 
+		turn++;
 		//ligne de code
-
+		if (turn == 1) {
+				
+		}
 
 		usleep(500000); // simulation de décision d'action
+
 		// prévenir que la décision est prise
 		if (sem_post(&sem_attente_decision_IA)){
 			error("Erreur opération V sur sem");

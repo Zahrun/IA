@@ -31,3 +31,19 @@ IA
 
 #MakeFile
 Makefile
+
+#Others
+.gitignore~
+.metadata/
+IA.cpp~
+Makefile~
+RemoteSystemsTempFiles/
+genetic.cpp~
+globals.h~
+networking.cpp~
+networking.h~
+data.cpp~
+data.h~
+genetic.h~
+globals.cpp~
+

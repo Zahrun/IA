@@ -4,72 +4,14 @@
  */
 
 #include "networking.h"
+#include "globals.h"
+#include "data.h"
 
-#define BUFFER_SIZE 2048
-#define NUMBER_OF_WORDS 14
-#define LONGUEURE_MAP 50
-#define LARGEUR_MAP 50
-
-const string WORDS[NUMBER_OF_WORDS] = {"width","get_action","set_visible","delete_piece","enter_piece","enter_city","leave_piece","leave_city","leave_terrain","lose_city","move","invade","error","create_piece"};
 
 int sockfd;
 
-struct case_t{
-	char unite ; // 'A' 'F' 'O' etc ( ' ' for nothing ) on garde les notations symboliques de la GUI de base
-	int terrain ; // mer => 0 et terre => 1
-	int visible ; // pas découvert => -1, découvert mais plus à jour => 0, découvert et visible (actualisé) => 1
-	int owner ; // Joueur => 0, Adversaire => 1, -1 si à personne ( ville )
-	int id ; // piece_id ou city_id
-	int transport ; // nombre d'unités transportées ( pour ville ou Transport )
-};
 
-case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
-// Matrice de cases où on va enregistrer tout ce que nous retourne le serveur.
-
-// TODO : init cases!
-
-void initCases(){
-    for (int i = 0; i < LONGUEURE_MAP; i++){
-        for (int j = 0; j < LARGEUR_MAP; j++){
-            cases[i][j].unite = ' ';
-            cases[i][j].terrain = -1;
-            cases[i][j].visible = -1;
-            cases[i][j].owner = -1;
-            cases[i][j].id = -1;
-            cases[i][j].transport = 0;
-         }
-    }               
-}
-
-// peut être vaudrait-il mieux garder un vector pour lier chaque id pièce à sa position!
-void find_and_destroy(int id_piece){
-	int found=0;
-    for (int i = 0; i < LONGUEURE_MAP; i++){
-        for (int j = 0; j < LARGEUR_MAP; j++){
-            if ( cases[i][j].unite != '0'  and cases[i][j].id == id_piece ){
-            	cases[i][j].unite= ' ';
-            	cases[i][j].id = -1;
-            	found=1;
-            	break;}
-         }
-         if (found==1){break;} // ça sert à rien de continuer de chercher
-    } 	
-}
-
-find_and_contain_transporter(int id_container, int diff){ // diff vaut 1 ou -1 selon si la pièce entre ou sort du container
-	int found=0;
-    for (int i = 0; i < LONGUEURE_MAP; i++){
-        for (int j = 0; j < LARGEUR_MAP; j++){
-            if ( cases[i][j].unite != 'T'  and cases[i][j].id == id_container ){
-            	cases[i][j].transport=cases[i][j].transport+diff;
-            	found=1;
-            	break;}
-         }
-         if (found==1){break;} // ça sert à rien de continuer de chercher
-    } 
-}
-
-void sendAction(){
+void sendAction(const void* action){
 	if (sem_post(&sem_attente_get_action)){
 		error("Erreur oppération V sur sem");
 	}
@@ -77,8 +19,8 @@ void sendAction(){
 	if (sem_wait(&sem_attente_decision_IA)){
 		error("Erreur oppération P sur sem");
 	}
-
-	write(sockfd, "end_turn\n", 9);
+	//const void* action = "end_turn\n";
+	write(sockfd, action, 9);
 }
 
 int recognizeWord(string word){
@@ -135,7 +77,10 @@ void readMessage(char * buffer){
 		
 	case 1 : // get_action
 		cout << "premier mot : get_action" << endl;
-		sendAction();
+		/*if (sem_wait(&sem_attente_decision_IA)){
+			error("Erreur opération V sur sem"); 
+		}*/
+		sendAction("end_turn\n");
 		break;
 		
 	case 2 : // set_visible

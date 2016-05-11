@@ -15,5 +15,4 @@ using namespace std;
 void genetic(string);
 
 
-
 #endif /* GENETIC_H_ */

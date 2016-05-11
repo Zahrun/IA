@@ -10,6 +10,9 @@
 sem_t sem_attente_decision_IA;
 sem_t sem_attente_get_action;
 
+/*bool my_turn = false;
+vector<const char*> list_constant;*/
+
 void error(const char *msg)
 {
     perror(msg);

@@ -16,9 +16,15 @@
 #include <unistd.h>		//read, write
 #include <netdb.h>		//gethostbyname
 #include <semaphore.h>	//sémaphores
+#include <vector>
+
+using namespace std;
 
 extern sem_t sem_attente_decision_IA;
 extern sem_t sem_attente_get_action;
+
+//bool my_turn = false;
+
 
 void error(const char *msg);
 
