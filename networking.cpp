@@ -1,17 +1,28 @@
 /*
  * networking.cpp
  *
+ TODO Alexis : 	- Mettre fichier de fts à part ( en cours )
+ 				- Array pour enregistrer les types/ids des pièces dans un container ( Ville ou Transporter ) ?
+ 				- Check formats "owner" et "symboles"
+ 				- Faire un vector de toutes nos villes actuelles + un autre vector de toutes nos pièces actuelles
+ 					( type + id + pos? )
+ 					-> Comme ça l'algo gén pourra se servir de ça.
+ 
  */
 
 #include "networking.h"
 #include "globals.h"
 #include "data.h"
 
+#define BUFFER_SIZE 2048
+#define NUMBER_OF_WORDS 14
+
 
 int sockfd;
 
 
 void sendAction(const void* action){
+
 	if (sem_post(&sem_attente_get_action)){
 		error("Erreur oppération V sur sem");
 	}
@@ -108,12 +119,12 @@ void readMessage(char * buffer){
 		}
 		else if (unite=="city"){ // ville prise par aucun joueur
 			cases[y][x].unite='O';
-			cases[y][x].owner=-1;}
+			cases[y][x].owner=0;}
 		else if (unite=="city_owned"){ // ville prise par un joueur
 			cases[y][x].unite='O';
 			issBuf >> id;
 			cases[y][x].id=id;
-			issBuf >> owner; // TODO : check format of "owner" !
+			issBuf >> owner; // TODO : check format of "owner" ! pour le moment : -1 pour adv et 1 pour joueur
 			cases[y][x].owner=owner;}
 		else if (unite=="piece"){
 			issBuf >> owner; // TODO : check format of "owner" !
@@ -160,17 +171,47 @@ void readMessage(char * buffer){
 		issBuf >> x;			
 		cases[y][x].id=-1;
 		cases[y][x].unite=' ';
-		cases[y][x].owner=-1;
+		cases[y][x].owner=0;
 		cases[y][x].transport=0;		
 		break;
+
+	case 9 : // lose_city
+		issBuf >> id_city;
+		change_state_city(id_city);
+		break;
 		
-/* TODO : from lose_city to create_piece
-TODO : vérifier que tous les formats ( typages ) sont corrects ! */
+	case 10 : //move
+		// TODO, besoin ou pas?
+		cout << "move not handled yet..." << endl;
+		break;
 		
+	case 11 : // invade_city
+		issBuf >> id_city;
+		issBuf >> y;
+		issBuf >> x;		
+		cases[y][x].id=id_city;
+		cases[y][x].unite='0';
+		cases[y][x].owner=1;
+		cases[y][x].transport=1; // une unité dans la ville ( celle qui vient de la prendre )	
+		
+	case 12 : // error
+		cout << "Error in readMessage : " << issBuf << endl;
+		break;
+		
+	case 13 : // create_piece
+		issBuf >> id;
+		issBuf >> piece_type;
+		issBuf >> piece_symbol;
+		issBuf >> id_city;
+		new_piece( id_city );
+		
+		
+		break;		
+	
 	default :
 		cout << "message non reconnu : \"" << firstWord << "\" !!!" << endl;
 	}
-	cout << "*** First word of message parsed" << endl;
+	cout << "One message parsed" << endl;
 
 }
 

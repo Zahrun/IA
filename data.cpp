@@ -43,3 +43,31 @@ void find_and_contain_transporter(int id_container, int diff){ // diff vaut 1 ou
          if (found==1){break;} // ça sert à rien de continuer de chercher
     } 
 }
+
+void change_state_city(int id_city){
+	int found=0;
+    for (int i = 0; i < LONGUEURE_MAP; i++){
+        for (int j = 0; j < LARGEUR_MAP; j++){
+            if ( cases[i][j].unite == 'O'  and cases[i][j].id == id_city ){
+            	if (cases[i][j].owner==1){cases[i][j].owner=-1;}
+            	else{cases[i][j].owner=1;}
+            	found=1;
+            	break;}
+         }
+         if (found==1){break;} // ça sert à rien de continuer de chercher
+    } 
+}
+
+void new_piece( int id_city ){ // add infos pieces somewhere
+	int found=0;
+    for (int i = 0; i < LONGUEURE_MAP; i++){
+        for (int j = 0; j < LARGEUR_MAP; j++){
+            if ( cases[i][j].id == id_city ){
+            	cases[i][j].transport = cases[i][j].transport + 1;
+            	found=1;
+            	break;}
+         }
+         if (found==1){break;} // ça sert à rien de continuer de chercher
+    } 	
+
+}

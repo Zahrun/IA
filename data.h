@@ -34,6 +34,9 @@ void find_and_destroy(int id_piece);
 
 void find_and_contain_transporter(int id_container, int diff);
 
+void change_state_city(int id_city);
+void new_piece( int id_city );
+
 #endif /* DATA_H_ */
 
 
