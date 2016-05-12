@@ -6,9 +6,10 @@
  */
 
 #include "genetic.h"
+#include "data.h"
 
 int turn = 0;
-vector<const char*> list_constant;
+vector<const char*> list_action;
 
 void genetic(string msg){
 	// synchronisation initiale des threads
@@ -27,7 +28,7 @@ void genetic(string msg){
 		turn++;
 		//ligne de code
 		if (turn == 1) {
-				
+				list_action.push_back("set_city_production 0 )
 		}
 
 		usleep(500000); // simulation de décision d'action

@@ -12,6 +12,8 @@
 
 using namespace std;
 
+extern vector<const char*> list_action;
+
 void genetic(string);
 
 

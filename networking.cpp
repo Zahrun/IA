@@ -13,6 +13,7 @@
 #include "networking.h"
 #include "globals.h"
 #include "data.h"
+#include "genetic.h"
 
 #define BUFFER_SIZE 2048
 #define NUMBER_OF_WORDS 14
