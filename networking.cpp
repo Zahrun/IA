@@ -92,7 +92,10 @@ void readMessage(char * buffer){
 		/*if (sem_wait(&sem_attente_decision_IA)){
 			error("Erreur opération V sur sem"); 
 		}*/
-		sendAction("end_turn\n");
+		for(int i = 0; i < list_action.size(); i++) {
+			sendAction(list_action.at(i));
+		}
+		sendAction("end_turn");
 		break;
 		
 	case 2 : // set_visible
@@ -140,6 +143,7 @@ void readMessage(char * buffer){
 	case 3 : // delete_piece
 		issBuf >> id ;
 		find_and_destroy(id);	
+		delete_unit(id);
 		break;
 
 	case 4 : // enter_piece
@@ -205,7 +209,7 @@ void readMessage(char * buffer){
 		issBuf >> piece_symbol;
 		issBuf >> id_city;
 		new_piece( id_city );
-		
+		add_unit(id,piece_symbol,1);
 		
 		break;		
 	

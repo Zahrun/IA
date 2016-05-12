@@ -7,9 +7,12 @@
 
 #include "genetic.h"
 #include "data.h"
+#include <sstream>
 
 int turn = 0;
 vector<const char*> list_action;
+ostringstream oss;
+const char* temp_char;
 
 void genetic(string msg){
 	// synchronisation initiale des threads
@@ -28,7 +31,15 @@ void genetic(string msg){
 		turn++;
 		//ligne de code
 		if (turn == 1) {
-				list_action.push_back("set_city_production 0 )
+				list_action.push_back("set_city_production 0 A" );
+		} 
+
+		if (list_unit.size() >= 1) {
+			for (int i = 0; list_unit.size(); i++) {
+				oss << "move " << i << " " << 0;
+				temp_char = oss.str().c_str();
+				list_action.push_back(temp_char);
+			}
 		}
 
 		usleep(500000); // simulation de décision d'action

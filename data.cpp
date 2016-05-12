@@ -2,6 +2,10 @@
 
 case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
 
+vector<unit> list_unit;
+
+vector<city> list_city;
+
 void initCases(){
     for (int i = 0; i < LONGUEURE_MAP; i++){
         for (int j = 0; j < LARGEUR_MAP; j++){
@@ -71,3 +75,35 @@ void new_piece( int id_city ){ // add infos pieces somewhere
     } 	
 
 }
+
+void add_unit(int id, char symbol, int owner) {
+	unit temp;
+	temp.id = id;
+	temp.unite = symbol;
+	temp.owner = owner;
+	list_unit.push_back(temp);
+}
+
+void delete_unit(int id) {
+	for(int i=0; i < list_unit.size(); i++) {
+		if (list_unit.at(i).id == id) {
+			list_unit.erase(list_unit.begin()+i);
+		}
+	} 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -23,8 +23,23 @@ struct case_t{
 	int transport ; // nombre d'unités transportées ( pour ville ou Transport )
 };
 
+struct unit{
+	char unite;
+	int id;
+	int owner;
+};
+
+struct city{
+	int id;
+	int owner;
+};
+
 extern case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
 // Matrice de cases où on va enregistrer tout ce que nous retourne le serveur.
+
+extern vector<unit> list_unit;
+
+extern vector<city> list_city;
 
 void initCases();
 
@@ -35,7 +50,12 @@ void find_and_destroy(int id_piece);
 void find_and_contain_transporter(int id_container, int diff);
 
 void change_state_city(int id_city);
+
 void new_piece( int id_city );
+
+void add_unit(int id, char symbol, int owner);
+
+void delete_unit(int id);
 
 #endif /* DATA_H_ */
 
