@@ -14,6 +14,7 @@
 #include "globals.h"
 #include "data.h"
 #include "genetic.h"
+#include <cstring>
 
 #define BUFFER_SIZE 2048
 #define NUMBER_OF_WORDS 14
@@ -21,8 +22,10 @@
 
 int sockfd;
 
+const char* stet;
+char* temp;
 
-void sendAction(const void* action){
+void sendAction(char* action, int length){
 
 	if (sem_post(&sem_attente_get_action)){
 		error("Erreur oppération V sur sem");
@@ -32,7 +35,8 @@ void sendAction(const void* action){
 		error("Erreur oppération P sur sem");
 	}
 	//const void* action = "end_turn\n";
-	write(sockfd, action, 9);
+	temp = action;
+	write(sockfd, temp, length);
 }
 
 int recognizeWord(string word){
@@ -89,21 +93,25 @@ void readMessage(char * buffer){
 		
 	case 1 : // get_action
 		cout << "premier mot : get_action" << endl;
-		/*if (sem_wait(&sem_attente_decision_IA)){
-			error("Erreur opération V sur sem"); 
-		}*/
-		for(int i = 0; i < list_action.size(); i++) {
-			sendAction(list_action.at(i));
+		//usleep(2000000);	
+
+		if (list_action.size() == 0) {
+			temp = "end_turn\n";
+		} else {
+			temp = list_action.front();
+			list_action.erase(list_action.begin());
 		}
-		sendAction("end_turn");
+
+		sendAction(temp,strlen(temp));
+
 		break;
 		
 	case 2 : // set_visible
 		/* il y a 4 façons d'uliser set_visible
 			-> avec 4 / 5 / 6 ou 8 params complémentaires */
 	
-		issBuf >> y; // peut être l'inverse entre x et y!
-		issBuf >> x;
+		issBuf >> x; // horizontal puis vertical
+		issBuf >> y;
 		issBuf >> tile;
 		if (tile=="ground"){
 			cases[y][x].terrain=1;}
@@ -123,15 +131,22 @@ void readMessage(char * buffer){
 		}
 		else if (unite=="city"){ // ville prise par aucun joueur
 			cases[y][x].unite='O';
-			cases[y][x].owner=0;}
+			cases[y][x].owner=-1;
+			issBuf >> id;
+			issBuf >> owner;
+			add_city(id, owner, x, y);
+		}
 		else if (unite=="city_owned"){ // ville prise par un joueur
 			cases[y][x].unite='O';
 			issBuf >> id;
 			cases[y][x].id=id;
-			issBuf >> owner; // TODO : check format of "owner" ! pour le moment : -1 pour adv et 1 pour joueur
-			cases[y][x].owner=owner;}
+			issBuf >> owner; // dans le code du prof : 0 = joueur 0 et 1 = joueur 1;
+			cases[y][x].owner=owner;
+			add_city(id, owner, x, y);
+			add_ally_city(id, owner, x, y);
+			}
 		else if (unite=="piece"){
-			issBuf >> owner; // TODO : check format of "owner" !
+			issBuf >> owner; // TODO : check format of "owner" ! C'est le numero de joueur
 			cases[y][x].owner=owner;
 			issBuf >> piece_symbol; // TODO : check si symbole à bien été implanté comme prévu dans les NOTES
 			cases[y][x].unite=piece_symbol;

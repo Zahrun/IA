@@ -32,6 +32,8 @@ struct unit{
 struct city{
 	int id;
 	int owner;
+	int x;
+	int y;
 };
 
 extern case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
@@ -40,6 +42,8 @@ extern case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
 extern vector<unit> list_unit;
 
 extern vector<city> list_city;
+
+extern vector<city> list_ally_city;
 
 void initCases();
 
@@ -56,6 +60,10 @@ void new_piece( int id_city );
 void add_unit(int id, char symbol, int owner);
 
 void delete_unit(int id);
+
+void add_city(int id, int owner, int x, int y);
+
+void add_ally_city(int id, int owner, int x, int y);
 
 #endif /* DATA_H_ */
 

@@ -1,10 +1,13 @@
 #include "data.h"
+#include "genetic.h"
 
 case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
 
 vector<unit> list_unit;
 
 vector<city> list_city;
+
+vector<city> list_ally_city;
 
 void initCases(){
     for (int i = 0; i < LONGUEURE_MAP; i++){
@@ -88,11 +91,46 @@ void delete_unit(int id) {
 	for(int i=0; i < list_unit.size(); i++) {
 		if (list_unit.at(i).id == id) {
 			list_unit.erase(list_unit.begin()+i);
+			break;
 		}
 	} 
 }
 
+void add_city(int id, int owner, int x, int y) {
+	city temp_city;
+	bool found = false;
+	for(int i = 0; i < list_city.size(); i++) {
+		if (list_city.at(i).id == id) {
+			found = true;
+			break;
+		}
+	}
+	if (not(found)) {
+		temp_city.id = id;
+		temp_city.owner = owner;
+		temp_city.x = x;
+		temp_city.y = y;
+		list_city.push_back(temp_city);
+	}
+}
 
+void add_ally_city(int id, int owner, int x, int y){
+	city temp_city;
+	bool found = false;
+	for(int i = 0; i < list_ally_city.size(); i++) {
+		if (list_ally_city.at(i).id == id) {
+			found = true;
+			break;
+		}
+	}
+	if (not(found)) {
+		temp_city.id = id;
+		temp_city.owner = owner;
+		temp_city.x = x;
+		temp_city.y = y;
+		list_ally_city.push_back(temp_city);
+	}
+}
 
 
 
