@@ -30,7 +30,7 @@ int turn = 0;
 vector<char*> list_action;
 ostringstream oss;
 char* temp_action;
-char* temp_char;
+char temp_char[50];
 string temp_string;
 int seed;
 
@@ -72,6 +72,12 @@ void genetic(string msg){
 					oss.clear();
 				}
 			}*/
+			//temp_action = "end_turn\n";
+			temp_string = "set_city_production " + to_string(list_ally_city.at(0).id) + " " + to_string(0) + "\n";
+			char *cstr = new char[temp_string.length() + 1];
+			strcpy(cstr, temp_string.c_str());
+			list_action.push_back(cstr);
+			delete [] cstr;
 		}
 
 		seed = 123456789;

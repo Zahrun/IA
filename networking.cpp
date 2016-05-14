@@ -98,7 +98,7 @@ void readMessage(char * buffer){
 		if (list_action.size() == 0) {
 			temp = "end_turn\n";
 		} else {
-			temp = list_action.front();
+			stet = list_action.front();
 			list_action.erase(list_action.begin());
 		}
 

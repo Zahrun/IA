@@ -120,7 +120,6 @@ void add_ally_city(int id, int owner, int x, int y){
 	for(int i = 0; i < list_ally_city.size(); i++) {
 		if (list_ally_city.at(i).id == id) {
 			found = true;
-			break;
 		}
 	}
 	if (not(found)) {
