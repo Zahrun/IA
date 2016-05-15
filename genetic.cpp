@@ -26,6 +26,12 @@
 genotype population[POPSIZE+1];
 genotype newpopulation[POPSIZE+1]; 
 
+case_t temp_map[LONGUEURE_MAP][LARGEUR_MAP];
+vector<unit> temp_list_ally_unit;
+vector<city> temp_list_ally_city;
+
+int gene_length = 0;
+
 int turn = 0;
 vector<char*> list_action;
 ostringstream oss;
@@ -52,6 +58,7 @@ void genetic(string msg){
 
 		turn++;
 		
+		gene_length = list_ally_unit.size()*2; //depend de la forme du gene
 
 		if (turn > 10) {
 			/*oss << "set_city_production " << list_ally_city.at(0).id << " " << 0 << "\n"; // 0 = ARMY
@@ -191,23 +198,34 @@ void elitist ( )
   return;
 }
 
-//****************************************************************************80
+//****************************************************************************
 
 void evaluate ( ) {
   int member;
   int i;
   double x[NVARS+1];
 
+	temp_map = cases;
+
   for ( member = 0; member < POPSIZE; member++ ) {
     for ( i = 0; i < NVARS; i++ ) {
       x[i+1] = population[member].gene[i];
     } 
-    population[member].fitness = ( x[1] * x[1] ) - ( x[1] * x[2] ) + x[3];
+    population[member].fitness = get_fitness(population[member].gene); ;  //TODO : 
   }
   return;
 }
 
-//****************************************************************************80
+void
+
+//****************************************************************************
+
+double get_fitness(int * gene) {
+
+	
+}
+
+//****************************************************************************
 
 int i4_uniform_ab ( int a, int b, int &seed ) {
   int c;

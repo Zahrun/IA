@@ -6,10 +6,6 @@
 #include "data.h"
 #include "globals.h"
 
-#define BUFFER_SIZE 2048
-#define NUMBER_OF_WORDS 14
-#define LONGUEURE_MAP 50
-#define LARGEUR_MAP 50
 
 const string WORDS[NUMBER_OF_WORDS] = {"width","get_action","set_visible","delete_piece","enter_piece","enter_city","leave_piece","leave_city","leave_terrain","lose_city","move","invade","error","create_piece"};
 
@@ -39,7 +35,7 @@ struct city{
 extern case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
 // Matrice de cases où on va enregistrer tout ce que nous retourne le serveur.
 
-extern vector<unit> list_unit;
+extern vector<unit> list_ally_unit;
 
 extern vector<city> list_city;
 
@@ -57,9 +53,9 @@ void change_state_city(int id_city);
 
 void new_piece( int id_city );
 
-void add_unit(int id, char symbol, int owner);
+void add_ally_unit(int id, char symbol, int owner);
 
-void delete_unit(int id);
+void delete_ally_unit(int id);
 
 void add_city(int id, int owner, int x, int y);
 

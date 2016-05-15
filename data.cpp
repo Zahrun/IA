@@ -3,7 +3,7 @@
 
 case_t cases[LONGUEURE_MAP][LARGEUR_MAP];
 
-vector<unit> list_unit;
+vector<unit> list_ally_unit;
 
 vector<city> list_city;
 
@@ -70,7 +70,7 @@ void new_piece( int id_city ){ // add infos pieces somewhere
     for (int i = 0; i < LONGUEURE_MAP; i++){
         for (int j = 0; j < LARGEUR_MAP; j++){
             if ( cases[i][j].id == id_city ){
-            	cases[i][j].transport = cases[i][j].transport + 1;
+            	cases[i][j].transport = cases[i][j].transport + 1; 
             	found=1;
             	break;}
          }
@@ -96,11 +96,11 @@ void delete_unit(int id) {
 	} 
 }
 
-void add_city(int id, int owner, int x, int y) {
+void add_ally_city(int id, int owner, int x, int y) {
 	city temp_city;
 	bool found = false;
-	for(int i = 0; i < list_city.size(); i++) {
-		if (list_city.at(i).id == id) {
+	for(int i = 0; i < list_ally_city.size(); i++) {
+		if (list_ally_city.at(i).id == id) {
 			found = true;
 			break;
 		}
@@ -110,7 +110,7 @@ void add_city(int id, int owner, int x, int y) {
 		temp_city.owner = owner;
 		temp_city.x = x;
 		temp_city.y = y;
-		list_city.push_back(temp_city);
+		list_ally_city.push_back(temp_city);
 	}
 }
 

@@ -20,6 +20,11 @@
 
 using namespace std;
 
+#define LONGUEURE_MAP 50
+#define LARGEUR_MAP 50
+#define BUFFER_SIZE 2048
+#define NUMBER_OF_WORDS 14
+
 extern sem_t sem_attente_decision_IA;
 extern sem_t sem_attente_get_action;
 

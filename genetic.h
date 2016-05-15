@@ -9,6 +9,7 @@
 #define GENETIC_H_
 
 #include "globals.h"
+#include "data.h"
 
 using namespace std;
 
@@ -20,13 +21,16 @@ using namespace std;
 
 struct genotype
 {
-  double gene[NVARS];
+  double gene[NVARS]; // soit les coord x y d'arrivée de chaque unité pour les n prochain tours
+											// soit la liste des k déplacements de chaque unité pour les n prochains 													tours
   double fitness;
   double upper[NVARS];
   double lower[NVARS];
   double rfitness;
   double cfitness;
 };
+
+extern case_t temp_map[LONGUEURE_MAP][LARGEUR_MAP];
 
 extern genotype population[POPSIZE+1];
 extern genotype newpopulation[POPSIZE+1]; 
