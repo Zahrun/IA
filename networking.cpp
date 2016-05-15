@@ -1,13 +1,6 @@
 /*
  * networking.cpp
  *
- TODO Alexis : 	- Mettre fichier de fts à part ( en cours )
- 				- Array pour enregistrer les types/ids des pièces dans un container ( Ville ou Transporter ) ?
- 				- Check formats "owner" et "symboles"
- 				- Faire un vector de toutes nos villes actuelles + un autre vector de toutes nos pièces actuelles
- 					( type + id + pos? )
- 					-> Comme ça l'algo gén pourra se servir de ça.
- 
  */
 
 #include "networking.h"
@@ -70,14 +63,14 @@ void readMessage(char * buffer){
 	string firstWord;
 	int x;
 	int y;
-	string tile; // ground OR water
+	string tile; // "Ground" OR "Water"
 	string unite;
 	int id;
 	int id_container;
 	int id_city;
 	int owner;
 	char piece_symbol;
-	string piece_type;
+	int piece_type;
 
 	/* On va mettre chaque paramètres ( integers ) dans un tableau */
 
@@ -113,9 +106,9 @@ void readMessage(char * buffer){
 		issBuf >> x; // horizontal puis vertical
 		issBuf >> y;
 		issBuf >> tile;
-		if (tile=="ground"){
+		if (tile=="Ground"){
 			cases[y][x].terrain=1;}
-		else if (tile=="water"){
+		else if (tile=="Water"){ // "Water" | "Ground" cf type terain Empire.ml empire-server
 			cases[y][x].terrain=0;}
 		else { cout << "problem reading tile" << endl;}
 
@@ -148,11 +141,11 @@ void readMessage(char * buffer){
 		else if (unite=="piece"){
 			issBuf >> owner; // TODO : check format of "owner" ! C'est le numero de joueur
 			cases[y][x].owner=owner;
-			issBuf >> piece_symbol; // TODO : check si symbole à bien été implanté comme prévu dans les NOTES
+			issBuf >> piece_symbol; // bien le char représentant l'unité
 			cases[y][x].unite=piece_symbol;
 			issBuf >> id;
 			cases[y][x].id=id;
-			issBuf >> piece_type;} // pas besoin ( si symbole fonctionne... )	
+			issBuf >> piece_type;} // pas besoin ( si symbole fonctionne... ) => symbole est implémenté correctement	
 		break;
 		
 	case 3 : // delete_piece

@@ -14,13 +14,13 @@ struct case_t{
 	char unite ; // 'A' 'F' 'O' etc ( ' ' for nothing ) on garde les notations symboliques de la GUI de base
 	int terrain ; // mer => 0 et terre => 1
 	int visible ; // pas découvert => -1, découvert mais plus à jour => 0, découvert et visible (actualisé) => 1
-	int owner ; // Joueur => 0, Adversaire => 1, -1 si à personne ( ville )
+	int owner ; // Joueur 0 => O, joueur 1 => 1, -1 si à personne ( ville )
 	int id ; // piece_id ou city_id
 	int transport ; // nombre d'unités transportées ( pour ville ou Transport )
 };
 
 struct unit{
-	char unite;
+	char unite; // 'A' | 'F' | 'T' | 'P' | 'B'
 	int id;
 	int owner;
 };

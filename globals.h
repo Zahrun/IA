@@ -20,8 +20,8 @@
 
 using namespace std;
 
-#define LONGUEURE_MAP 50
-#define LARGEUR_MAP 50
+#define LONGUEURE_MAP 40
+#define LARGEUR_MAP 40
 #define BUFFER_SIZE 2048
 #define NUMBER_OF_WORDS 14
 
