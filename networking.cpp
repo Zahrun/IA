@@ -158,7 +158,7 @@ void readMessage(char * buffer){
 	case 3 : // delete_piece
 		issBuf >> id ;
 		find_and_destroy(id);	
-		delete_unit(id);
+		delete_ally_unit(id);
 		break;
 
 	case 4 : // enter_piece
@@ -224,7 +224,7 @@ void readMessage(char * buffer){
 		issBuf >> piece_symbol;
 		issBuf >> id_city;
 		new_piece( id_city );
-		add_unit(id,piece_symbol,1);
+		add_ally_unit(id,piece_symbol,1);
 		
 		break;		
 	

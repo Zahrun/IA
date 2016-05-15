@@ -61,6 +61,8 @@ void add_city(int id, int owner, int x, int y);
 
 void add_ally_city(int id, int owner, int x, int y);
 
+void copy_map();
+
 #endif /* DATA_H_ */
 
 

@@ -205,7 +205,7 @@ void evaluate ( ) {
   int i;
   double x[NVARS+1];
 
-	temp_map = cases;
+	copy_map();
 
   for ( member = 0; member < POPSIZE; member++ ) {
     for ( i = 0; i < NVARS; i++ ) {
@@ -220,10 +220,10 @@ void
 
 //****************************************************************************
 
-double get_fitness(int * gene) {
+/*double get_fitness(double* gene) {
 
-	
-}
+	return 1;
+}*/
 
 //****************************************************************************
 

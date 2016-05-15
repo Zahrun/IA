@@ -84,23 +84,23 @@ void add_unit(int id, char symbol, int owner) {
 	temp.id = id;
 	temp.unite = symbol;
 	temp.owner = owner;
-	list_unit.push_back(temp);
+	list_ally_unit.push_back(temp);
 }
 
 void delete_unit(int id) {
-	for(int i=0; i < list_unit.size(); i++) {
-		if (list_unit.at(i).id == id) {
-			list_unit.erase(list_unit.begin()+i);
+	for(int i=0; i < list_ally_unit.size(); i++) {
+		if (list_ally_unit.at(i).id == id) {
+			list_ally_unit.erase(list_ally_unit.begin()+i);
 			break;
 		}
 	} 
 }
 
-void add_ally_city(int id, int owner, int x, int y) {
+void add_city(int id, int owner, int x, int y) {
 	city temp_city;
 	bool found = false;
-	for(int i = 0; i < list_ally_city.size(); i++) {
-		if (list_ally_city.at(i).id == id) {
+	for(int i = 0; i < list_city.size(); i++) {
+		if (list_city.at(i).id == id) {
 			found = true;
 			break;
 		}
@@ -110,7 +110,7 @@ void add_ally_city(int id, int owner, int x, int y) {
 		temp_city.owner = owner;
 		temp_city.x = x;
 		temp_city.y = y;
-		list_ally_city.push_back(temp_city);
+		list_city.push_back(temp_city);
 	}
 }
 
@@ -131,6 +131,14 @@ void add_ally_city(int id, int owner, int x, int y){
 	}
 }
 
+
+void copy_map() {
+	for (int i = 0; i < LONGUEURE_MAP; i++){
+    for (int j = 0; j < LARGEUR_MAP; j++){
+			temp_map[i][j] = cases[i][j];
+		}
+	}
+}
 
 
 

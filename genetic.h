@@ -42,6 +42,7 @@ void genetic(string);
 void crossover ( int &seed );
 void elitist ( );
 void evaluate ( );
+double get_fitness(double* gene);
 int i4_uniform_ab ( int a, int b, int &seed );
 void initialize ( string filename, int &seed );
 void keep_the_best ( );
