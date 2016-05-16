@@ -1,6 +1,15 @@
 /*
  * networking.cpp
  *
+ 
+Warning !!
+Il semblerait qu'il faille plutôt utiliser des const char* plutôt que char* en c++
+à peu près partout...
+
+http://stackoverflow.com/questions/59670/how-to-get-rid-of-deprecated-conversion-from-string-constant-to-char-warnin
+ 
+ *
+ *
  */
 
 #include "networking.h"
@@ -17,8 +26,10 @@ int sockfd;
 
 const char* stet;
 char* temp;
+/*const*/ char* end_turn = "end_turn";
+//string temp_string;
 
-void sendAction(char* action, int length){
+void sendAction(char* action, int length){ // prendre un const char* ?
 
 	if (sem_post(&sem_attente_get_action)){
 		error("Erreur oppération V sur sem");
@@ -28,8 +39,8 @@ void sendAction(char* action, int length){
 		error("Erreur oppération P sur sem");
 	}
 	//const void* action = "end_turn\n";
-	temp = action;
-	write(sockfd, temp, length);
+	//temp = action;
+	write(sockfd, action, length);
 }
 
 int recognizeWord(string word){
@@ -89,13 +100,14 @@ void readMessage(char * buffer){
 		//usleep(2000000);	
 
 		if (list_action.size() == 0) {
-			temp = "end_turn\n";
+			sendAction(end_turn,strlen(end_turn));
 		} else {
-			stet = list_action.front();
+			temp = list_action.front();
 			list_action.erase(list_action.begin());
+			sendAction(temp,strlen(temp));
 		}
 
-		sendAction(temp,strlen(temp));
+
 
 		break;
 		
@@ -139,7 +151,7 @@ void readMessage(char * buffer){
 			add_ally_city(id, owner, x, y);
 			}
 		else if (unite=="piece"){
-			issBuf >> owner; // TODO : check format of "owner" ! C'est le numero de joueur
+			issBuf >> owner; // C'est le numero de joueur ( 0 | 1 )
 			cases[y][x].owner=owner;
 			issBuf >> piece_symbol; // bien le char représentant l'unité
 			cases[y][x].unite=piece_symbol;

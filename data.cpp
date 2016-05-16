@@ -79,7 +79,7 @@ void new_piece( int id_city ){ // add infos pieces somewhere
 
 }
 
-void add_unit(int id, char symbol, int owner) {
+void add_ally_unit(int id, char symbol, int owner) {
 	unit temp;
 	temp.id = id;
 	temp.unite = symbol;
@@ -87,7 +87,7 @@ void add_unit(int id, char symbol, int owner) {
 	list_ally_unit.push_back(temp);
 }
 
-void delete_unit(int id) {
+void delete_ally_unit(int id) {
 	for(int i=0; i < list_ally_unit.size(); i++) {
 		if (list_ally_unit.at(i).id == id) {
 			list_ally_unit.erase(list_ally_unit.begin()+i);

@@ -22,5 +22,5 @@ sudo ln /bin/bash /usr/bin/bash
 
 script/execute-ia-player.sh 1
 
-##### Pour avoir la carte 50x50
-Dans Empire/empire-server/sources/main.ml à mettre m_width = 50 et m_height = 50 
+##### Pour avoir la carte 40x40
+Dans Empire/empire-server/sources/main.ml à mettre m_width = 40 et m_height = 40 
