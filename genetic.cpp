@@ -88,7 +88,7 @@ void genetic(string msg){
 		}
 
 		seed = 123456789;
-
+	//initialize(seed);
   	/*evaluate ( );
 
   	keep_the_best ( );
@@ -278,21 +278,12 @@ int i4_uniform_ab ( int a, int b, int &seed ) {
 
 //****************************************************************************80
 
-void initialize ( string filename, int &seed ) {
+void initialize ( int &seed ) {
   int i;
-  ifstream input;
   int j;
   double lbound;
   double ubound;
 
-  input.open ( filename.c_str ( ) );
-
-  if ( !input ) {
-    cerr << "\n";
-    cerr << "INITIALIZE - Fatal error!\n";
-    cerr << "  Cannot open the input file!\n";
-    exit ( 1 );
-  }
 
 //  Initialize variables within the bounds 
   for ( i = 0; i < NVARS; i++ ) {
@@ -304,7 +295,7 @@ void initialize ( string filename, int &seed ) {
       population[j].cfitness = 0;
       population[j].lower[i] = lbound;
       population[j].upper[i]= ubound;
-      population[j].gene[i] = r8_uniform_ab ( lbound, ubound, seed );
+      population[j].gene[i] = r8_uniform_ab ( lbound, ubound, seed ); // TODO
     }
   }
 

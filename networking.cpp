@@ -6,6 +6,7 @@ Warning !!
 Il semblerait qu'il faille plutôt utiliser des const char* plutôt que char* en c++
 à peu près partout...
 
+compilation => " warning: deprecated conversion from string constant to ‘char*’ "
 http://stackoverflow.com/questions/59670/how-to-get-rid-of-deprecated-conversion-from-string-constant-to-char-warnin
  
  *
@@ -74,7 +75,7 @@ void readMessage(char * buffer){
 	string firstWord;
 	int x;
 	int y;
-	string tile; // "Ground" OR "Water"
+	string tile; // "ground" OR "water"
 	string unite;
 	int id;
 	int id_container;
@@ -83,7 +84,7 @@ void readMessage(char * buffer){
 	char piece_symbol;
 	int piece_type;
 
-	/* On va mettre chaque paramètres ( integers ) dans un tableau */
+	/* On va mettre chaque paramètre ( integers ) dans un tableau */
 
 
 	if (!(issBuf >> firstWord)){ // cpp : >> on a stream reads one word at a time
@@ -101,6 +102,7 @@ void readMessage(char * buffer){
 
 		if (list_action.size() == 0) {
 			sendAction(end_turn,strlen(end_turn));
+			
 		} else {
 			temp = list_action.front();
 			list_action.erase(list_action.begin());
@@ -118,9 +120,9 @@ void readMessage(char * buffer){
 		issBuf >> x; // horizontal puis vertical
 		issBuf >> y;
 		issBuf >> tile;
-		if (tile=="Ground"){
+		if (tile=="ground"){
 			cases[y][x].terrain=1;}
-		else if (tile=="Water"){ // "Water" | "Ground" cf type terain Empire.ml empire-server
+		else if (tile=="water"){ // "water" | "ground" cf type terain Empire.ml empire-server
 			cases[y][x].terrain=0;}
 		else { cout << "problem reading tile" << endl;}
 
@@ -207,6 +209,7 @@ void readMessage(char * buffer){
 		
 	case 10 : //move
 		// TODO, besoin ou pas?
+		// normalement on reçoit pas de move, on les envoie
 		cout << "move not handled yet..." << endl;
 		break;
 		
