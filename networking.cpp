@@ -26,11 +26,11 @@ http://stackoverflow.com/questions/59670/how-to-get-rid-of-deprecated-conversion
 int sockfd;
 
 const char* stet;
-char* temp;
-/*const*/ char* end_turn = "end_turn";
+string temp;
+string end_turn = "end_turn\n";
 //string temp_string;
 
-void sendAction(char* action, int length){ // prendre un const char* ?
+void sendAction(string action, int length){ // prendre un const char* ?
 
 	if (sem_post(&sem_attente_get_action)){
 		error("Erreur oppération V sur sem");
@@ -41,7 +41,8 @@ void sendAction(char* action, int length){ // prendre un const char* ?
 	}
 	//const void* action = "end_turn\n";
 	//temp = action;
-	write(sockfd, action, length);
+	cout << "before the write : " << string(action) << endl;
+	write(sockfd, action.c_str(), length);
 }
 
 int recognizeWord(string word){
@@ -99,14 +100,17 @@ void readMessage(char * buffer){
 	case 1 : // get_action
 		cout << "premier mot : get_action" << endl;
 		//usleep(2000000);	
-
+	
+		cout << "size list action : " << to_string(list_action.size()) << endl;
+		display_list_action();
 		if (list_action.size() == 0) {
-			sendAction(end_turn,strlen(end_turn));
-			
+			sendAction(end_turn,strlen(end_turn.c_str()));
+			cout << "end_turn sent" << endl;
 		} else {
 			temp = list_action.front();
+			cout << "action to send : " << string(temp) << endl;
 			list_action.erase(list_action.begin());
-			sendAction(temp,strlen(temp));
+			sendAction(temp,strlen(temp.c_str()));
 		}
 
 
