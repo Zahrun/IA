@@ -241,7 +241,8 @@ while (getline(issBuffer,line) > 0){
 		issBuf >> piece_symbol;
 		issBuf >> id_city;
 		new_piece( id_city );
-		add_ally_unit(id,piece_symbol,1);
+		
+		add_ally_unit(id,piece_symbol,1,get_x_city(id_city),get_y_city(id_city));
 		
 		break;		
 	

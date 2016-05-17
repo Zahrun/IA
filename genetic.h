@@ -13,19 +13,29 @@
 
 using namespace std;
 
-# define POPSIZE 50
+# define POPSIZE 30
 # define MAXGENS 1000
-# define NVARS 3
+//# define NVARS 3
 # define PXOVER 0.8
 # define PMUTATION 0.15
 
+# define NBTOURS 1
+
+# define PTS_ATTAQUE_VILLE_ENNEMIE 150
+# define PTS_ATTAQUE_VILLE_NEUTRE 100
+# define PTS_DECOUVERTE_TERRAIN 2
+# define PTS_VISION_TERRAIN 1
+# define PTS_UNITE_DANS_LEAU -10
+
+# define LBOUND 0
+# define UBOUND 6 // mouvement possibles numérotés de 0 à 5 ( D,Z,A,Q,X,C) ( -> le 7ème mouvement étant de ne pas bouger la pièce ! Qui peut parfois être le meilleur coup à jouer)
+
 struct genotype
 {
-  double gene[NVARS]; // soit les coord x y d'arrivée de chaque unité pour les n prochain tours
-											// soit la liste des k déplacements de chaque unité pour les n prochains 													tours
+  vector<int> gene; // on enregistre tous le sdéplacements de chaque unité
+  					  // utilisation d'un vecteur car taille varibale !
+											// soit la liste des k déplacements de chaque unité pour les n prochains tours
   double fitness;
-  double upper[NVARS];
-  double lower[NVARS];
   double rfitness;
   double cfitness;
 };
@@ -46,7 +56,7 @@ void elitist ( );
 void evaluate ( );
 double get_fitness(double* gene);
 int i4_uniform_ab ( int a, int b, int &seed );
-void initialize ( string filename, int &seed );
+void initialize ( int &seed );
 void keep_the_best ( );
 void mutate ( int &seed );
 double r8_uniform_ab ( double a, double b, int &seed );
