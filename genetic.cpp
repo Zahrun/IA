@@ -287,7 +287,6 @@ void initialize ( int &seed ) {
 
 //  Initialize variables within the bounds 
   for ( i = 0; i < NVARS; i++ ) {
-    input >> lbound >> ubound;
 
     for ( j = 0; j < POPSIZE; j++ ) {
       population[j].fitness = 0;
@@ -299,7 +298,7 @@ void initialize ( int &seed ) {
     }
   }
 
-  input.close ( );
+
 
   return;
 }
