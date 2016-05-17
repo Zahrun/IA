@@ -7,6 +7,7 @@
 
 #include "genetic.h"
 #include "data.h"
+#include <math.h> 
 #include <sstream>
 # include <cstdlib>
 # include <iostream>
@@ -17,11 +18,11 @@
 # include <ctime>
 # include <cstring>
 
-# define POPSIZE 50
-# define MAXGENS 1000
-# define NVARS 3  //nb de tours * nombres de var par tour
-# define PXOVER 0.8
-# define PMUTATION 0.15
+
+
+
+
+int nvars; // normalement c'est fixé sur un algo gén (NVARS), la on va le faire en dynamique vu qu'il dépend de notre nombre d'unité actuel
 
 genotype population[POPSIZE+1];
 genotype newpopulation[POPSIZE+1]; 
@@ -41,6 +42,9 @@ string temp_string;
 int seed;
 
 void genetic(string msg){
+
+	int generation ;	
+	
 	// synchronisation initiale des threads
 	if (sem_post(&sem_attente_decision_IA)){
 		error("Erreur opération V sur sem");  //opération ca prend pas 2 p
@@ -58,7 +62,7 @@ void genetic(string msg){
 
 		turn++;
 		
-		gene_length = list_ally_unit.size()*2; //depend de la forme du gene
+		//gene_length = list_ally_unit.size()*2; //depend de la forme du gene => remplacement par nvars
 
 		if (turn > 10) {
 			
@@ -85,8 +89,8 @@ void genetic(string msg){
 		}
 
 		seed = 123456789;
-	//initialize(seed);
-  	/*evaluate ( );
+	initialize(seed);
+  	evaluate();
 
   	keep_the_best ( );
 
@@ -95,15 +99,17 @@ void genetic(string msg){
     	selector ( seed );
     	crossover ( seed );
     	mutate ( seed );
-    	report ( generation );
+    	//report ( generation );
     	evaluate ( );
     	elitist ( );
-  	}*/
+  	}
 
-		usleep(500000); // simulation de décision d'action
+		//usleep(500000); // simulation de décision d'action
 
 		timestamp ( );
 
+	cout << "Fini de tourner pour l'algo gén, on a un vainqueur !! Plus qu'à créer la liste d'actions corespondantes ... " << endl;
+	
 		// prévenir que la décision est prise
 		if (sem_post(&sem_attente_decision_IA)){
 			error("Erreur opération V sur sem");
@@ -136,7 +142,10 @@ void crossover ( int &seed ) {
   return;
 }
 
+
+
 //****************************************************************************
+
 
 void elitist ( )
 {
@@ -181,17 +190,19 @@ void elitist ( )
 //  best one from the previous generation                     
 
   if ( population[POPSIZE].fitness <= best ) {
-    for ( i = 0; i < NVARS; i++ ) {
-      population[POPSIZE].gene[i] = population[best_mem].gene[i];
-    }
+    //for ( i = 0; i < NVARS; i++ ) {
+      population[POPSIZE].gene = population[best_mem].gene;
+    //}
     population[POPSIZE].fitness = population[best_mem].fitness;
   } else {
-    for ( i = 0; i < NVARS; i++ ) {
-      population[worst_mem].gene[i] = population[POPSIZE].gene[i];
-    }
+    //for ( i = 0; i < NVARS; i++ ) {
+      population[worst_mem].gene = population[POPSIZE].gene;
+    //}
     population[worst_mem].fitness = population[POPSIZE].fitness;
   } 
 
+	cout << " le meilleur score de cette génération vaut : " << to_string(population[POPSIZE].fitness) << "!!" << endl;
+	
   return;
 }
 
@@ -200,27 +211,110 @@ void elitist ( )
 void evaluate ( ) {
   int member;
   int i;
-  double x[NVARS+1];
+  int unite_num;
+  int tour_num;
+  double score ;
+  int score_to_add ;
+  //double x[NVARS+1];
+  int x;
+  int y;
+  int new_x;
+  int new_y;
+  case_t temp_case;
 
-	copy_map();
+  
 
   for ( member = 0; member < POPSIZE; member++ ) {
-    for ( i = 0; i < NVARS; i++ ) {
-      x[i+1] = population[member].gene[i];
+  copy_map(); 								// intialisation de temp_map
+  temp_list_ally_unit = list_ally_unit;		// initialisation temp_list_ally_unit
+  score =0;
+  
+    for ( tour_num = 0; tour_num < NBTOURS ; tour_num++ ) {
+    	for ( unite_num = 0; unite_num < list_ally_unit.size() ; unite_num++ ) {
+			
+			// on récupère les coordonnées de l'unité
+			score_to_add = 0 ;
+			x= temp_list_ally_unit.at(unite_num).x;
+			y= temp_list_ally_unit.at(unite_num).y;
+			new_x =x;
+			new_y =y;
+			switch ( population[member].gene.at( (tour_num+1)*(unite_num+1) ) ) {
+			case 0 :
+				new_x++;
+				break;
+			case 1 :
+				new_y--;
+				break;
+			case 2 :
+				new_x--;
+				new_y--;
+				break;
+			case 3 :
+				new_x--;
+				break;
+			case 4 :
+				new_y++;
+				break;
+			case 5 :
+				new_x++;
+				new_y++;
+				break;
+			case 6 :
+				// on ne fait rien
+				// la pièce ne bouge pas!
+				break;
+			default :			
+				break;
+			}	
+			
+			if ( !( 0 <= new_x <= LARGEUR_MAP) && (0 <= new_y <= LONGUEURE_MAP ) ){
+				score_to_add = score_to_add - 10000 ; // on sort de la map, faut surtout pas faire ça malheureux ! 
+			} else {			
+			// on regarde à chaque tour si le déplacement rapporte des points
+				// on va essayer de pondérer pour qu'une action rapporte plus de points faite maintenant que à 5 tours
+				temp_case = cases[new_x][new_y];
+			
+				if ( temp_case.unite != ' ' && temp_case.unite != 'O' && temp_case.owner == 1 ) {
+					score_to_add = score_to_add - 100 ; // on attaque sa propre unité, c'est mal !
+				}
+				
+				else if ( temp_case.terrain == 0 ) {
+					score_to_add = score_to_add - 25 ; // unité se noie, pas tip top...
+				}
+				
+				 else if ( temp_case.unite == 'O' && temp_case.owner == 0 ) {
+					score_to_add = score_to_add + PTS_ATTAQUE_VILLE_ENNEMIE;
+				}
+		
+				else if ( temp_case.unite == '0' && temp_case.owner == -1 ) {
+					score_to_add = score_to_add + PTS_ATTAQUE_VILLE_NEUTRE;
+				}
+		
+				else if ( temp_case.visible == -1 ) { 
+					score_to_add = score_to_add + PTS_DECOUVERTE_TERRAIN ;
+				}
+		
+				else if ( temp_case.visible == 0 ) { 
+					score_to_add = score_to_add + PTS_VISION_TERRAIN ; 
+					// pour le moment la vision à 2 cases d'une army est négligée...
+				}				
+				
+				 score = score + pow(score_to_add ,((NBTOURS+1-tour_num)/NBTOURS)) ;
+				// TODO : on met à jour la matrice temporaire de donnée   
+				temp_map[x][y].unite = ' ';
+				temp_map[new_x][new_y].unite = 'A';
+    		}
+    		
+    	}
     } 
-    population[member].fitness = get_fitness(population[member].gene); ;  //TODO : 
+  population[member].fitness = (int)score ; 
   }
+  
+// Possibilité d'insérer un affichage global de notre population avec leur score !
+  
   return;
 }
 
-
-
-//****************************************************************************
-// TODO
-double get_fitness(double* gene) {
-
-	return 1;
-}
 
 //****************************************************************************
 
@@ -278,20 +372,20 @@ int i4_uniform_ab ( int a, int b, int &seed ) {
 void initialize ( int &seed ) {
   int i;
   int j;
-  double lbound;
-  double ubound;
 
 
+
+  nvars = list_ally_unit.size() * NBTOURS;
+  
 //  Initialize variables within the bounds 
-  for ( i = 0; i < NVARS; i++ ) {
+  for ( i = 0; i < nvars; i++ ) {
 
     for ( j = 0; j < POPSIZE; j++ ) {
       population[j].fitness = 0;
       population[j].rfitness = 0;
       population[j].cfitness = 0;
-      population[j].lower[i] = lbound;
-      population[j].upper[i]= ubound;
-      population[j].gene[i] = r8_uniform_ab ( lbound, ubound, seed ); // TODO
+      population[j].gene.push_back( i4_uniform_ab ( LBOUND, UBOUND, seed ) ); // un int random entre 0 et 6 ( compris )
+      																		  // tous les mouvements possibles
     }
   }
 
@@ -300,6 +394,7 @@ void initialize ( int &seed ) {
 }
 
 //****************************************************************************80
+
 
 void keep_the_best ( ) {
   int cur_best;
@@ -315,15 +410,19 @@ void keep_the_best ( ) {
     }
   }
 
-//  Once the best member in the population is found, copy the genes.
-  for ( i = 0; i < NVARS; i++ ) {
-    population[POPSIZE].gene[i] = population[cur_best].gene[i];
-  }
+//  Once the best member in the population is found, copy the genes in population POPSIZE 
+//  l'indidivu POPSIZE+1 sert de mémo !
+//  for ( i = 0; i < nvars; i++ ) {
+    population[POPSIZE].gene = population[cur_best].gene; // <= copie de tous les genes !
+//  }
 
+  cout << "le meilleur de la première génération a un score de : " << to_string(population[POPSIZE].fitness) << " (qui devrait d'ailleurs valoir si tout se passe bien : " << to_string(population[cur_best].fitness) << ") ! " << endl ;
   return;
 }
 
+
 //****************************************************************************80
+
 
 void mutate ( int &seed ) {
   const double a = 0.0;
@@ -335,18 +434,17 @@ void mutate ( int &seed ) {
   double x;
 
   for ( i = 0; i < POPSIZE; i++ ) {
-    for ( j = 0; j < NVARS; j++ ) {
+    for ( j = 0; j < nvars; j++ ) {
       x = r8_uniform_ab ( a, b, seed );
-      if ( x < PMUTATION ) {
-        lbound = population[i].lower[j];
-        ubound = population[i].upper[j];  
-        population[i].gene[j] = r8_uniform_ab ( lbound, ubound, seed );
+      if ( x < PMUTATION ) { 
+        population[i].gene.at(j) = r8_uniform_ab ( LBOUND, UBOUND, seed );
       }
     }
   }
 
   return;
 }
+
 
 //****************************************************************************80
 
@@ -379,6 +477,7 @@ double r8_uniform_ab ( double a, double b, int &seed ) {
 
 //****************************************************************************80
 
+/*
 void report ( int generation ) {
   double avg;
   double best_val;
@@ -416,7 +515,10 @@ void report ( int generation ) {
   return;
 }
 
+*/
+
 //****************************************************************************80
+
 
 void selector ( int &seed ) {
   const double a = 0.0;
@@ -433,7 +535,7 @@ void selector ( int &seed ) {
     sum = sum + population[mem].fitness;
   }
 
-//  Calculate the relative fitness of each member.
+//  Calculate the relative fitness of each member. ( moyenne )
   for ( mem = 0; mem < POPSIZE; mem++ ) {
     population[mem].rfitness = population[mem].fitness / sum;
   }
@@ -464,10 +566,13 @@ void selector ( int &seed ) {
     population[i] = newpopulation[i]; 
   }
 
+// TODO : affichage new_pop !
+
   return;     
 }
 
 //****************************************************************************80
+
 
 void timestamp ( ) {
 # define TIME_SIZE 40
@@ -496,20 +601,20 @@ void Xover ( int one, int two, int &seed ) {
   double t;
 
 //  Select the crossover point.
-  point = i4_uniform_ab ( 0, NVARS - 1, seed );
+  point = i4_uniform_ab ( 0, nvars - 1, seed );
 
 //  Swap genes in positions 0 through POINT-1.
   for ( i = 0; i < point; i++ ) {
-    t                       = population[one].gene[i];
-    population[one].gene[i] = population[two].gene[i];
-    population[two].gene[i] = t;
+    t                       = population[one].gene.at(i);
+    population[one].gene.at(i) = population[two].gene.at(i);
+    population[two].gene.at(i) = t;
   }
 
   return;
 }
 
 
-
+//****************************************************************************
 
 void display_list_action() {
 	cout << "list action complete : " << endl;

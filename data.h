@@ -22,6 +22,8 @@ struct case_t{
 struct unit{
 	char unite; // 'A' | 'F' | 'T' | 'P' | 'B'
 	int id;
+	int x;
+	int y;
 	int owner;
 };
 
@@ -53,7 +55,7 @@ void change_state_city(int id_city);
 
 void new_piece( int id_city );
 
-void add_ally_unit(int id, char symbol, int owner);
+void add_ally_unit(int id, char symbol, int owner, int x, int y);
 
 void delete_ally_unit(int id);
 
@@ -62,6 +64,10 @@ void add_city(int id, int owner, int x, int y);
 void add_ally_city(int id, int owner, int x, int y);
 
 void copy_map();
+
+int get_x_city(int id_city);
+
+int get_y_city(int id_city);
 
 #endif /* DATA_H_ */
 

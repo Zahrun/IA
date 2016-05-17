@@ -79,9 +79,11 @@ void new_piece( int id_city ){ // add infos pieces somewhere
 
 }
 
-void add_ally_unit(int id, char symbol, int owner) {
+void add_ally_unit(int id, char symbol, int owner, int x, int y) {
 	unit temp;
 	temp.id = id;
+	temp.x = x;
+	temp.y =y;
 	temp.unite = symbol;
 	temp.owner = owner;
 	list_ally_unit.push_back(temp);
@@ -140,6 +142,7 @@ void copy_map() {
 	}
 }
 
+
 void display_list_ally_city() {
 	cout << "ally city : " << endl;
 	for(int i=0; i < list_ally_city.size(); i++){
@@ -147,9 +150,27 @@ void display_list_ally_city() {
 	}
 }
 
+int get_x_city(int id_city){
+//cout << "ally city : " << endl;
+	for(int i=0; i < list_ally_city.size(); i++){
+		
+		if ( list_ally_city.at(i).id == id_city ) {
+			return list_ally_city.at(i).x ;
+		}
+	}
+	cout << " probleme get_x_city de " << to_string(id_city) << endl;
+}
 
-
-
+int get_y_city(int id_city){
+//cout << "ally city : " << endl;
+	for(int i=0; i < list_ally_city.size(); i++){
+		
+		if ( list_ally_city.at(i).id == id_city ) {
+			return list_ally_city.at(i).y ;
+		}
+	}
+	cout << " probleme get_y_city de " << to_string(id_city) << endl;
+}
 
 
 
