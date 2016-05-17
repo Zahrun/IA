@@ -33,7 +33,7 @@ vector<city> temp_list_ally_city;
 int gene_length = 0;
 
 int turn = 0;
-vector<char*> list_action;
+vector<string> list_action;
 ostringstream oss;
 char* temp_action;
 char temp_char[50];
@@ -61,30 +61,27 @@ void genetic(string msg){
 		gene_length = list_ally_unit.size()*2; //depend de la forme du gene
 
 		if (turn > 10) {
-			/*oss << "set_city_production " << list_ally_city.at(0).id << " " << 0 << "\n"; // 0 = ARMY
-			temp_char = oss.str().c_str();
-			list_action.push_back(temp_char);
-			oss.clear();*/
-			/*cout << "salut" << endl;
-			temp_string = "set_city_production " + to_string(list_ally_city.at(0).id) + " " + to_string(0) + "\n";
-			temp_action = (char*)temp_string.c_str();
-			//temp_char = temp_action.c_str();
-			list_action.push_back(temp_action);*/
+			
+			//temp_string = "set_city_production " + to_string(list_ally_city.at(0).id) + " " + to_string(0) + "\n";
+			
 		} else {
 			/*if (list_unit.size() >= 1) {
 				for (int i = 0; list_unit.size(); i++) {
-					oss << "move " << list_unit.at(i).id << " " << 0 << "\n";
-					temp_char = oss.str().c_str();
-					list_action.push_back(temp_char);
-					oss.clear();
+			
 				}
 			}*/
 			//temp_action = "end_turn\n";
-			temp_string = "set_city_production " + to_string(list_ally_city.at(0).id) + " " + to_string(0) + "\n";
-			char *cstr = new char[temp_string.length() + 1];
-			strcpy(cstr, temp_string.c_str());
-			list_action.push_back(cstr);
-			delete [] cstr;
+			cout << "genetic : 1" << endl;
+			temp_string = "set_city_production " + to_string(0) + "\n";
+			cout << "genetic : 2" << endl;
+			//char *cstr = new char[temp_string.length() + 1];
+			cout << "genetic : 3" << endl;
+			//strcpy(cstr, temp_string.c_str());
+			cout << "genetic : 4 and " << temp_string << endl;
+			list_action.push_back(temp_string);
+			cout << "genetic : 5" << endl;
+			//delete [] cstr;
+			cout << "genetic : 6" << endl;
 		}
 
 		seed = 123456789;
@@ -287,8 +284,6 @@ void initialize ( int &seed ) {
 
 //  Initialize variables within the bounds 
   for ( i = 0; i < NVARS; i++ ) {
-    input >> lbound >> ubound;
-
     for ( j = 0; j < POPSIZE; j++ ) {
       population[j].fitness = 0;
       population[j].rfitness = 0;
@@ -298,8 +293,6 @@ void initialize ( int &seed ) {
       population[j].gene[i] = r8_uniform_ab ( lbound, ubound, seed ); // TODO
     }
   }
-
-  input.close ( );
 
   return;
 }
@@ -516,9 +509,12 @@ void Xover ( int one, int two, int &seed ) {
 
 
 
-
-
-
+void display_list_action() {
+	cout << "list action complete : " << endl;
+	for( int i = 0; i < list_action.size(); i++) {
+		cout << string(list_action.at(i)) << endl;
+	}
+}
 
 
 

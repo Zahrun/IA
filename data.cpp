@@ -140,7 +140,12 @@ void copy_map() {
 	}
 }
 
-
+void display_list_ally_city() {
+	cout << "ally city : " << endl;
+	for(int i=0; i < list_ally_city.size(); i++){
+		cout << "city id : " << to_string(list_ally_city.at(i).id) << endl;
+	}
+}
 
 
 

@@ -35,7 +35,7 @@ extern case_t temp_map[LONGUEURE_MAP][LARGEUR_MAP];
 extern genotype population[POPSIZE+1];
 extern genotype newpopulation[POPSIZE+1]; 
 
-extern vector<char*> list_action;
+extern vector<string> list_action;
 
 void genetic(string);
 
@@ -52,6 +52,6 @@ void report ( int generation );
 void selector ( int &seed );
 void timestamp ( );
 void Xover ( int one, int two, int &seed );
-
+void display_list_action() ;
 
 #endif /* GENETIC_H_ */
