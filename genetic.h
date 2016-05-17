@@ -37,6 +37,8 @@ extern genotype newpopulation[POPSIZE+1];
 
 extern vector<string> list_action;
 
+extern bool new_city;
+
 void genetic(string);
 
 void crossover ( int &seed );
@@ -53,5 +55,6 @@ void selector ( int &seed );
 void timestamp ( );
 void Xover ( int one, int two, int &seed );
 void display_list_action() ;
+void display_list_ally_city() ;
 
 #endif /* GENETIC_H_ */

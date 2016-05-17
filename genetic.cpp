@@ -30,7 +30,7 @@ case_t temp_map[LONGUEURE_MAP][LARGEUR_MAP];
 vector<unit> temp_list_ally_unit;
 vector<city> temp_list_ally_city;
 
-int gene_length = 0;
+bool new_city = true;
 
 int turn = 0;
 vector<string> list_action;
@@ -58,32 +58,22 @@ void genetic(string msg){
 
 		turn++;
 		
-		gene_length = list_ally_unit.size()*2; //depend de la forme du gene
-
-		if (turn > 10) {
-			
-			//temp_string = "set_city_production " + to_string(list_ally_city.at(0).id) + " " + to_string(0) + "\n";
-			
-		} else {
-			/*if (list_unit.size() >= 1) {
-				for (int i = 0; list_unit.size(); i++) {
-			
-				}
-			}*/
-			//temp_action = "end_turn\n";
+		if (new_city) {
+			display_list_ally_city();
 			cout << "genetic : 1" << endl;
-			temp_string = "set_city_production " + to_string(0) + "\n";
-			cout << "genetic : 2" << endl;
-			//char *cstr = new char[temp_string.length() + 1];
-			cout << "genetic : 3" << endl;
-			//strcpy(cstr, temp_string.c_str());
-			cout << "genetic : 4 and " << temp_string << endl;
+			temp_string = "set_city_production " + to_string(list_ally_city.back().id) + " " + to_string(0) + "\n";
+			cout << "genetic : 2 and " << temp_string << endl;
 			list_action.push_back(temp_string);
-			cout << "genetic : 5" << endl;
-			//delete [] cstr;
-			cout << "genetic : 6" << endl;
-		}
-
+			cout << "genetic : 3" << endl;
+			new_city = false;
+		} else if (turn > 6) {
+			/*display_list_ally_unit();
+			cout << "genetic : 4" << endl;
+			temp_string = "move " + to_string(list_ally_unit.back().id) + " " + to_string(0) + "\n";
+			cout << "genetic : 5 and " << temp_string << endl;
+			list_action.push_back(temp_string);
+			cout << "genetic : 6" << endl;*/
+		
 		seed = 123456789;
 	//initialize(seed);
   	/*evaluate ( );
@@ -100,6 +90,11 @@ void genetic(string msg){
     	elitist ( );
   	}*/
 
+		for(int i=0; i < population[POPSIZE].gene.size(); i++) {
+			
+		}
+		}		
+	
 		usleep(500000); // simulation de décision d'action
 
 		timestamp ( );

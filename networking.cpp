@@ -30,17 +30,8 @@ string temp;
 string end_turn = "end_turn\n";
 //string temp_string;
 
-void sendAction(string action, int length){ // prendre un const char* ?
+void sendAction(string action, int length){ 
 
-	if (sem_post(&sem_attente_get_action)){
-		error("Erreur oppération V sur sem");
-	}
-	cout << "Ntwrk : en attente de l'action à envoyer..." << endl;
-	if (sem_wait(&sem_attente_decision_IA)){
-		error("Erreur oppération P sur sem");
-	}
-	//const void* action = "end_turn\n";
-	//temp = action;
 	cout << "before the write : " << string(action) << endl;
 	write(sockfd, action.c_str(), length);
 }
@@ -72,8 +63,8 @@ void readDescription(char * buffer){
 
 void readMessage(char * buffer){
 	cout << "*** Parsing first word of message" << endl;
-	istringstream issBuf(buffer);
-	string firstWord;
+	istringstream issBuffer(buffer), issBuf;
+	string firstWord, line;
 	int x;
 	int y;
 	string tile; // "ground" OR "water"
@@ -84,23 +75,34 @@ void readMessage(char * buffer){
 	int owner;
 	char piece_symbol;
 	int piece_type;
+	bool test = true;
 
 	/* On va mettre chaque paramètre ( integers ) dans un tableau */
 
+while (getline(issBuffer,line) > 0){
+		issBuf.str(line);
 
 	if (!(issBuf >> firstWord)){ // cpp : >> on a stream reads one word at a time
 		error("buffer vide !!!");
 	}
+
 	switch (recognizeWord(firstWord)){
 	case 0 : // width
 		cout << "premier mot : width" << endl;
-		readDescription(buffer);
+		//readDescription(buffer);
 		break;
 		
 	case 1 : // get_action
 		cout << "premier mot : get_action" << endl;
-		//usleep(2000000);	
-	
+		
+		if (sem_post(&sem_attente_get_action)){
+			error("Erreur oppération V sur sem"); 
+		}
+		cout << "Ntwrk : en attente de l'action à envoyer..." << endl;
+		if (sem_wait(&sem_attente_decision_IA)){
+			error("Erreur oppération P sur sem");
+		}
+
 		cout << "size list action : " << to_string(list_action.size()) << endl;
 		display_list_action();
 		if (list_action.size() == 0) {
@@ -131,6 +133,7 @@ void readMessage(char * buffer){
 		else { cout << "problem reading tile" << endl;}
 
 		issBuf >> unite;
+		cout << "unite : " << string(unite) << endl;
 		if (unite=="none"){
 			cases[y][x].unite=' ';
 			if (cases[y][x].visible == -1) { // terrain n'était pas découvert du tout
@@ -147,7 +150,7 @@ void readMessage(char * buffer){
 			issBuf >> owner;
 			add_city(id, owner, x, y);
 		}
-		else if (unite=="city_owned"){ // ville prise par un joueur
+		else if (unite=="owned_city"){ // ville prise par un joueur
 			cases[y][x].unite='O';
 			issBuf >> id;
 			cases[y][x].id=id;
@@ -155,6 +158,7 @@ void readMessage(char * buffer){
 			cases[y][x].owner=owner;
 			add_city(id, owner, x, y);
 			add_ally_city(id, owner, x, y);
+			cout << "add ally city : 0" << endl;
 			}
 		else if (unite=="piece"){
 			issBuf >> owner; // C'est le numero de joueur ( 0 | 1 )
@@ -225,7 +229,8 @@ void readMessage(char * buffer){
 		cases[y][x].unite='0';
 		cases[y][x].owner=1;
 		cases[y][x].transport=1; // une unité dans la ville ( celle qui vient de la prendre )	
-		
+		add_ally_city(id_city, owner, x, y);
+		new_city = true;
 	case 12 : // error
 		cout << "Error in readMessage : " << issBuf << endl;
 		break;
@@ -244,6 +249,9 @@ void readMessage(char * buffer){
 		cout << "message non reconnu : \"" << firstWord << "\" !!!" << endl;
 	}
 	cout << "One message parsed" << endl;
+	
+	issBuf.clear();
+} 
 
 }
 
@@ -297,8 +305,9 @@ void connexion(char * host, int port)
 			cout << "fin de la lecture: lu = 0" << endl;
 			break;
 		}
-		readMessage(buffer);
 		cout << "reçu :\"" << buffer << "\"" << endl;
+		readMessage(buffer);
+
 		bzero(buffer, 256);
 	}
 	close(sockfd);

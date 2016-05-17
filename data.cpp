@@ -117,12 +117,16 @@ void add_city(int id, int owner, int x, int y) {
 void add_ally_city(int id, int owner, int x, int y){
 	city temp_city;
 	bool found = false;
+	cout << "add ally city : 1" << endl;
 	for(int i = 0; i < list_ally_city.size(); i++) {
 		if (list_ally_city.at(i).id == id) {
 			found = true;
+			cout << "add ally city : 2" << endl;
 		}
 	}
+	cout << "add ally city : 3" << endl;
 	if (not(found)) {
+		cout << "add ally city : 4" << endl;
 		temp_city.id = id;
 		temp_city.owner = owner;
 		temp_city.x = x;
@@ -147,7 +151,14 @@ void display_list_ally_city() {
 	}
 }
 
-
+void display_list_ally_unit() {
+	cout << "ally unit : " << endl;
+	if (list_ally_unit.size() > 0) {
+		for(int i=0; i < list_ally_city.size(); i++){
+			cout << "city " << list_ally_unit.at(i).unite << " id : " << to_string(list_ally_unit.at(i).id) << endl;
+		}
+	}
+}
 
 
 
