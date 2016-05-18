@@ -346,8 +346,7 @@ void evaluate ( ) {
 
 						else if ( temp_case.unite == 1 && temp_case.owner == 1 ) {
 
-							score_to_add = score_to_add - PTS_CANNIBAL;
-
+							score_to_add = score_to_add + PTS_CANNIBAL;
 						}
 
 						else if ( temp_case.visible == -1 ) {
