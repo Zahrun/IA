@@ -93,7 +93,8 @@ void readMessage(char * buffer){
 
 		case 1 : // get_action
 			cout << "premier mot : get_action" << endl;
-
+			
+			if (not(fin_du_tour)) {
 			if (sem_post(&sem_attente_get_action)){
 				error("Erreur oppération V sur sem");
 			}
@@ -101,19 +102,22 @@ void readMessage(char * buffer){
 			if (sem_wait(&sem_attente_decision_IA)){
 				error("Erreur oppération P sur sem");
 			}
+			}
 
 			cout << "size list action : " << to_string(list_action.size()) << endl;
 			display_list_action();
 			if (list_action.size() == 0) {
 				sendAction(end_turn,strlen(end_turn.c_str()));
 				cout << "end_turn sent" << endl;
+				fin_du_tour = false;
 			} else {
 				temp = list_action.front();
 				cout << "action to send : " << string(temp) << endl;
 				list_action.erase(list_action.begin());
 				sendAction(temp,strlen(temp.c_str()));
 			}
-
+		
+			
 
 
 			break;

@@ -32,6 +32,7 @@ vector<unit> temp_list_ally_unit;
 vector<city> temp_list_ally_city;
 
 bool new_city = true;
+bool fin_du_tour = false;
 
 int turn = 0;
 vector<string> list_action;
@@ -73,12 +74,15 @@ void genetic(string msg){
 			cout << "genetic : 3" << endl;
 			new_city = false;
 
-		} else if (turn > 6) {
-
-			if (list_ally_unit.size()) {
+		} else if (list_ally_unit.size()) {
 
 			display_list_ally_unit();
-
+			
+			/*cout << "genetic : 1" << endl;
+			temp_string = "move " + to_string(list_ally_unit.back().id) + " " + to_string(1) + "\n";
+			cout << "genetic : 2 and " << temp_string << endl;
+			list_action.push_back(temp_string);
+			cout << "genetic : 3" << endl;*/
 		
 			seed = 123456789;
 			cout << "genetic : 4" << endl;
@@ -108,11 +112,14 @@ void genetic(string msg){
 
 			for(int i=0; i < list_ally_unit.size(); i++) {
 			cout << "genetic : 15" << endl;
+				if (population[POPSIZE].gene.at(i) != 6) {
 				temp_string = "move " + to_string(list_ally_unit.at(i).id) + " " + to_string(population[POPSIZE].gene.at(i)) + "\n";
 				cout << "genetic : 16 and " << temp_string << endl;
 				list_action.push_back(temp_string);
 				cout << "genetic : 17" << endl;
+				}
 			}
+			fin_du_tour = true;
 
 		}		
 	
@@ -126,7 +133,7 @@ void genetic(string msg){
 				cout << "number of ally units " << list_ally_unit.size() << endl;
 				list_action.push_back(action);
 			}*/
-		}
+	
 
 		timestamp ( );
 

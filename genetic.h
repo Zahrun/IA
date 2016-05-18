@@ -49,6 +49,7 @@ extern genotype newpopulation[POPSIZE+1];
 extern vector<string> list_action;
 
 extern bool new_city;
+extern bool fin_du_tour;
 extern int turn;
 
 void genetic(string);
