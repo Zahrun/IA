@@ -86,19 +86,19 @@ void genetic(string msg){
 			{
 				//cout << "genetic : " << generation << " - " << "8" << endl;
 
-				cout << "selector" << endl;
+				//cout << "selector" << endl;
 				selector ( seed );
-				cout << "crossover" << endl;
+				//cout << "crossover" << endl;
 				crossover ( seed );
 
-				cout << "mutate" << endl;
+				//cout << "mutate" << endl;
 				mutate ( seed );
 
-				cout << "evaluate" << endl;
+				//cout << "evaluate" << endl;
 				//report ( generation );
 				evaluate ( );
 
-				cout << "elistist" << endl;
+				//cout << "elistist" << endl;
 				elitist ( );
 
 			}
@@ -272,10 +272,10 @@ void evaluate ( ) {
 				score_to_add = 0 ;
 				x= temp_list_ally_unit.at(unite_num).x;
 				y= temp_list_ally_unit.at(unite_num).y;
-				new_x =x;
-				new_y =y;
 
 				do {
+					new_x =x;
+					new_y =y;
 					switch ( population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num) ) ) {
 					case 0 :
 						new_x++;
@@ -321,12 +321,12 @@ void evaluate ( ) {
 
 						}
 						else if ( temp_case.unite == 2 && temp_case.owner == 1 ) {
-							population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
+							population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	6;
 							continue;
 						}
 
 						else if ( temp_case.terrain == 0 ) {
-							population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
+							population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	6;
 							continue;
 							//score_to_add = score_to_add - 2500 ; // unité se noie, pas tip top...
 

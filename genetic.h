@@ -14,20 +14,20 @@
 
 using namespace std;
 
-# define POPSIZE 30
-# define MAXGENS 200
+# define POPSIZE 20
+# define MAXGENS 500
 //# define NVARS 3
 # define PXOVER 0.8
 # define PMUTATION 0.15
 
 # define NBTOURS 3
 
-# define PTS_ATTAQUE_VILLE_ENNEMIE 2000
+# define PTS_ATTAQUE_VILLE_ENNEMIE 20000
 # define PTS_ATTAQUE_VILLE_NEUTRE 1000
 # define PTS_DECOUVERTE_TERRAIN 20
 # define PTS_CANNIBAL -5
-# define PTS_ATTAQUE_ENNEMI 10
-# define PTS_VISION_TERRAIN 500
+# define PTS_ATTAQUE_ENNEMI 100
+# define PTS_VISION_TERRAIN 1000
 # define PTS_UNITE_DANS_LEAU -10
 
 # define LBOUND 0
