@@ -72,7 +72,7 @@ void readMessage(char * buffer){
 	int id_container;
 	int id_city;
 	int owner;
-	char piece_symbol;
+	int piece_symbol;
 	int piece_type;
 	bool test = true;
 
@@ -126,46 +126,47 @@ void readMessage(char * buffer){
 			issBuf >> y;
 			issBuf >> tile;
 			if (tile=="ground"){
-				cases[y][x].terrain=1;}
+				cases[x][y].terrain=1;}
 			else if (tile=="water"){ // "water" | "ground" cf type terain Empire.ml empire-server
-				cases[y][x].terrain=0;}
+				cases[x][y].terrain=0;}
 			else { cout << "problem reading tile" << endl;}
 
 			issBuf >> unite;
 			cout << "unite : " << string(unite) << endl;
 			if (unite=="none"){
-				cases[y][x].unite=' ';
-				if (cases[y][x].visible == -1) { // terrain n'était pas découvert du tout
-					cases[y][x].visible = 1;}
-				else if ( cases[y][x].visible == 0) { // terrain était en ombre
-					cases[y][x].visible = 1; }
+				cases[x][y].unite=' ';
+				if (cases[x][y].visible == -1) { // terrain n'était pas découvert du tout
+					cases[x][y].visible = 1;}
+				else if ( cases[x][y].visible == 0) { // terrain était en ombre
+					cases[x][y].visible = 1; }
 				else { // terrain était actualisé et passe en ombre
-					cases[y][x].visible = 0; } // vraiment avec set visible ??????????
+					cases[x][y].visible = 0; } // vraiment avec set visible ??????????
 			}
 			else if (unite=="city"){ // ville prise par aucun joueur
-				cases[y][x].unite='O';
-				cases[y][x].owner=-1;
+				cases[x][y].unite='O';
+				cases[x][y].owner=-1;
 				issBuf >> id;
 				issBuf >> owner;
 				add_city(id, owner, x, y);
 			}
 			else if (unite=="owned_city"){ // ville prise par un joueur
-				cases[y][x].unite='O';
+				cases[x][y].unite='O';
 				issBuf >> id;
-				cases[y][x].id=id;
+				cases[x][y].id=id;
 				issBuf >> owner; // dans le code du prof : 0 = joueur 0 et 1 = joueur 1;
-				cases[y][x].owner=owner;
+				cases[x][y].owner=owner;
 				add_city(id, owner, x, y);
+				cout << " city coord x : " << to_string(x) << "  / y : " << to_string(y) << endl;
 				add_ally_city(id, owner, x, y);	// ally même si enemy ??????????
 				cout << "add ally city : 0" << endl;
 			}
 			else if (unite=="piece"){
 				issBuf >> owner; // C'est le numero de joueur ( 0 | 1 )
-				cases[y][x].owner=owner;
+				cases[x][y].owner=owner;
 				issBuf >> piece_symbol; // bien le char représentant l'unité
-				cases[y][x].unite=piece_symbol;
+				cases[x][y].unite=piece_symbol;
 				issBuf >> id;
-				cases[y][x].id=id;
+				cases[x][y].id=id;
 				issBuf >> piece_type;} // pas besoin ( si symbole fonctionne... ) => symbole est implémenté correctement
 			break;
 
@@ -201,12 +202,12 @@ void readMessage(char * buffer){
 
 		case 8 : // leave_terrain
 			issBuf >> id;
-			issBuf >> y;
 			issBuf >> x;
-			cases[y][x].id=-1;
-			cases[y][x].unite=' ';
-			cases[y][x].owner=0;
-			cases[y][x].transport=0;
+			issBuf >> y;
+			cases[x][y].id=-1;
+			cases[x][y].unite=' ';
+			cases[x][y].owner=0;
+			cases[x][y].transport=0;
 			break;
 
 		case 9 : // lose_city
@@ -222,12 +223,12 @@ void readMessage(char * buffer){
 
 		case 11 : // invade_city
 			issBuf >> id_city;
-			issBuf >> y;
 			issBuf >> x;
-			cases[y][x].id=id_city;
-			cases[y][x].unite='0';
-			cases[y][x].owner=1;
-			cases[y][x].transport=1; // une unité dans la ville ( celle qui vient de la prendre )
+			issBuf >> y;
+			cases[x][y].id=id_city;
+			cases[x][y].unite='0';
+			cases[x][y].owner=1;
+			cases[x][y].transport=1; // une unité dans la ville ( celle qui vient de la prendre )
 			add_ally_city(id_city, owner, x, y);
 			new_city = true;
 		case 12 : // error
@@ -237,11 +238,11 @@ void readMessage(char * buffer){
 		case 13 : // create_piece
 			issBuf >> id;
 			issBuf >> piece_type;
-			issBuf >> piece_symbol;
 			issBuf >> id_city;
+			issBuf >> owner;
 			new_piece( id_city );
-
-			add_ally_unit(id,piece_symbol,1,get_x_city(id_city),get_y_city(id_city));
+			cout << "piece x : " << to_string(get_x_city(id_city)) << " / y : " << to_string(get_y_city(id_city)) << endl;
+			add_ally_unit(id,100,1,get_x_city(id_city),get_y_city(id_city));
 
 			break;
 

@@ -47,7 +47,7 @@ void genetic(string msg){
 
 	// synchronisation initiale des threads
 	if (sem_post(&sem_attente_decision_IA)){
-		error("Erreur opération V sur sem");  //opération ca prend pas 2 p
+		error("Erreur opération V sur sem");  
 	}
 
 	while(1){
@@ -64,6 +64,7 @@ void genetic(string msg){
 
 
 		if (new_city) {
+
 			display_list_ally_city();
 			cout << "genetic : 1" << endl;
 			temp_string = "set_city_production " + to_string(list_ally_city.back().id) + " " + to_string(0) + "\n";
@@ -71,7 +72,10 @@ void genetic(string msg){
 			list_action.push_back(temp_string);
 			cout << "genetic : 3" << endl;
 			new_city = false;
+
 		} else if (turn > 6) {
+
+			if (list_ally_unit.size()) {
 
 			display_list_ally_unit();
 
@@ -122,7 +126,7 @@ void genetic(string msg){
 				cout << "number of ally units " << list_ally_unit.size() << endl;
 				list_action.push_back(action);
 			}*/
-
+		}
 
 		timestamp ( );
 
@@ -246,20 +250,29 @@ void evaluate ( ) {
   for ( member = 0; member < POPSIZE; member++ ) {
   copy_map(); 								// intialisation de temp_map
   temp_list_ally_unit = list_ally_unit;		// initialisation temp_list_ally_unit
+
+cout << "temp ally unit : " << endl;
+	if (temp_list_ally_unit.size() > 0) {
+		for(int i=0; i < list_ally_unit.size(); i++){
+			cout << "unit " << to_string(temp_list_ally_unit.at(i).unite) << " id : " << to_string(temp_list_ally_unit.at(i).id) << endl;
+		}
+		cout << "ally_unit : ok" << endl;
+	}
+
   score =0;
   	cout << "evaluate : 2" << endl;
     for ( tour_num = 0; tour_num < NBTOURS ; tour_num++ ) {
     	for ( unite_num = 0; unite_num < list_ally_unit.size() ; unite_num++ ) {
-			cout << "evaluate : 3" << endl;
+			cout << "evaluate : 3 / x : " << to_string(temp_list_ally_unit.at(unite_num).x) << "    y : " << temp_list_ally_unit.at(unite_num).y << endl;
+			display_list_ally_city();
 			// on récupère les coordonnées de l'unité
 			score_to_add = 0 ;
 			x= temp_list_ally_unit.at(unite_num).x;
 			y= temp_list_ally_unit.at(unite_num).y;
 			new_x =x;
 			new_y =y;
-			cout << "evaluate : 4" << endl;
+			cout << "evaluate : 4 : gene size : " << population[member].gene.size() << "  : " << to_string((tour_num)*(list_ally_unit.size())+(unite_num)) << endl;
 			switch ( population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num) ) ) {	//TODO : corriger le out of range ici
-//( population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num) ) )
 			case 0 :
 				new_x++;
 				break;
@@ -288,11 +301,11 @@ void evaluate ( ) {
 				break;
 			}	
 			cout << "evaluate : 5" << endl;
-			if ( !( 0 <= new_x <= LARGEUR_MAP) && (0 <= new_y <= LONGUEURE_MAP ) ){
+			if ( !( 0 <= new_x < LARGEUR_MAP) && (0 <= new_y < LONGUEURE_MAP ) ){
 				cout << "evaluate : 6" << endl;
 				score_to_add = score_to_add - 10000 ; // on sort de la map, faut surtout pas faire ça malheureux ! 
 			} else {		
-				cout << "evaluate : 7" << endl;	
+				cout << "evaluate : 7 : " << to_string(cases[new_x][new_y].terrain) << endl;	
 			// on regarde à chaque tour si le déplacement rapporte des points
 				// on va essayer de pondérer pour qu'une action rapporte plus de points faite maintenant que à 5 tours
 				temp_case = cases[new_x][new_y];

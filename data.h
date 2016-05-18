@@ -11,7 +11,7 @@ const string WORDS[NUMBER_OF_WORDS] = {"width","get_action","set_visible","delet
 
 
 struct case_t{
-	char unite ; // 'A' 'F' 'O' etc ( ' ' for nothing ) on garde les notations symboliques de la GUI de base
+	int unite ; // 'A' 'F' 'O' etc ( ' ' for nothing ) on garde les notations symboliques de la GUI de base
 	int terrain ; // mer => 0 et terre => 1
 	int visible ; // pas découvert => -1, découvert mais plus à jour => 0, découvert et visible (actualisé) => 1
 	int owner ; // Joueur 0 => O, joueur 1 => 1, -1 si à personne ( ville )

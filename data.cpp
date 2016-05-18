@@ -150,7 +150,7 @@ void copy_map() {
 void display_list_ally_city() {
 	cout << "ally city : " << endl;
 	for(int i=0; i < list_ally_city.size(); i++){
-		cout << "city id : " << to_string(list_ally_city.at(i).id) << endl;
+		cout << "city id : " << to_string(list_ally_city.at(i).id)  << " /  x : " << to_string(list_ally_city.at(i).x) << " /  y : " << to_string(list_ally_city.at(i).y) << endl;
 	}
 }
 
@@ -158,7 +158,7 @@ void display_list_ally_unit() {
 	cout << "ally unit : " << endl;
 	if (list_ally_unit.size() > 0) {
 		for(int i=0; i < list_ally_unit.size(); i++){
-			cout << "unit " << to_string(list_ally_unit.at(i).unite) << " id : " << to_string(list_ally_unit.at(i).id) << endl;
+			cout << "unit " << to_string(list_ally_unit.at(i).unite) << " id : " << to_string(list_ally_unit.at(i).id) << " /  x : " << to_string(list_ally_unit.at(i).x) << " /  y : " << to_string(list_ally_unit.at(i).y) << endl;
 		}
 		cout << "ally_unit : ok" << endl;
 	}
