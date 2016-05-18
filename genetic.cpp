@@ -64,17 +64,7 @@ void genetic(string msg){
 		turn++;
 		cout << "tour : " << to_string(turn) << endl;
 
-		if (new_city) {
-
-			display_list_ally_city();
-
-			temp_string = "set_city_production " + to_string(list_ally_city.back().id) + " " + to_string(0) + "\n";
-
-			list_action.push_back(temp_string);
-
-			new_city = false;
-
-		} else if (list_ally_unit.size()) {
+		 if (list_ally_unit.size()) {
 
 			display_list_ally_unit();
 			
@@ -280,7 +270,8 @@ void evaluate ( ) {
 			new_x =x;
 			new_y =y;
 
-			switch ( population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num) ) ) {	//TODO : corriger le out of range ici
+			do {
+			switch ( population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num) ) ) {	
 			case 0 :
 				new_x++;
 				break;
@@ -309,35 +300,45 @@ void evaluate ( ) {
 				break;
 			}	
 
-			if ( !( 0 <= new_x < LARGEUR_MAP) && (0 <= new_y < LONGUEURE_MAP ) ){
-
-				score_to_add = score_to_add - 10000 ; // on sort de la map, faut surtout pas faire ça malheureux ! 
+			if ( !( 0 <= new_x && new_x < LARGEUR_MAP) && (0 <= new_y && new_y < LONGUEURE_MAP ) ){
+					population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
+					continue;
+		
+				
+				//score_to_add = score_to_add - 10000 ; // on sort de la map, faut surtout pas faire ça malheureux ! 
 			} else {		
 
 			// on regarde à chaque tour si le déplacement rapporte des points
 				// on va essayer de pondérer pour qu'une action rapporte plus de points faite maintenant que à 5 tours
 				temp_case = cases[new_x][new_y];
 
-				if ( temp_case.unite != ' ' && temp_case.unite != 'O' && temp_case.owner == 1 ) {
-
-					score_to_add = score_to_add - 100 ; // on attaque sa propre unité, c'est mal !			cout << "evaluate : 1" << endl;
+				if ( temp_case.unite == 2 && temp_case.owner == 1 ) {
+					population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
+					continue;
 				}
 				
 				else if ( temp_case.terrain == 0 ) {
-
-					score_to_add = score_to_add - 250 ; // unité se noie, pas tip top...
+					population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
+					continue;
+					//score_to_add = score_to_add - 2500 ; // unité se noie, pas tip top...
 
 				}
 				
-				 else if ( temp_case.unite == 'O' && temp_case.owner == 0 ) {
+				 else if ( temp_case.unite == 1 && temp_case.owner == 0 ) {
 
 					score_to_add = score_to_add + PTS_ATTAQUE_VILLE_ENNEMIE;
 
 				}
 		
-				else if ( temp_case.unite == '0' && temp_case.owner == -1 ) {
+				else if ( temp_case.unite == 1 && temp_case.owner == -1 ) {
 
 					score_to_add = score_to_add + PTS_ATTAQUE_VILLE_NEUTRE;
+
+				}
+
+				else if ( temp_case.unite == 1 && temp_case.owner == 1 ) {
+
+					score_to_add = score_to_add - 50;
 
 				}
 		
@@ -351,16 +352,21 @@ void evaluate ( ) {
 					score_to_add = score_to_add + PTS_VISION_TERRAIN ; 
 
 					// pour le moment la vision à 2 cases d'une army est négligée...
-				}				
+				}
+
+				
 
 				 score = score + pow(score_to_add ,((NBTOURS+1-tour_num)/NBTOURS)) ;
 
 				// TODO : on met à jour la matrice temporaire de donnée   
-				temp_map[x][y].unite = ' ';
-				temp_map[new_x][new_y].unite = 'A';
+				if (temp_map[x][y].unite == 2){temp_map[x][y].unite = -1;};
+				temp_map[new_x][new_y].unite = 2;
+
+				temp_list_ally_unit.at(unite_num).x = new_x;
+				temp_list_ally_unit.at(unite_num).y = new_y;
 
     		}
-    		
+    	}while(0);
     	}
     } 
   population[member].fitness = (int)score ; 
