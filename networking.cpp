@@ -19,7 +19,7 @@ http://stackoverflow.com/questions/59670/how-to-get-rid-of-deprecated-conversion
 #include "genetic.h"
 #include <cstring>
 
-#define BUFFER_SIZE 2048
+#define BUFFER_SIZE 262144
 
 
 int sockfd;
@@ -112,7 +112,6 @@ void readMessage(char * buffer){
 				cout << "action to send : " << string(temp) << endl;
 				list_action.erase(list_action.begin());
 				sendAction(temp,strlen(temp.c_str()));
-				sendAction(end_turn,strlen(end_turn.c_str()));
 			}
 
 
