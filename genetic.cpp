@@ -103,7 +103,6 @@ void genetic(string msg){
 				cout << "number of ally units " << list_ally_unit.size() << endl;
 				list_action.push_back(action);
 			}
-			list_action.push_back(end_turn); // on finit le tour car les units peuvent plus bouger
 		}		
 
 		timestamp ( );
@@ -201,7 +200,7 @@ void elitist ( )
 		population[worst_mem].fitness = population[POPSIZE].fitness;
 	}
 
-	cout << " le meilleur score de cette génération vaut : " << to_string(population[POPSIZE].fitness) << "!!" << endl;
+	//cout << " le meilleur score de cette génération vaut : " << to_string(population[POPSIZE].fitness) << "!!" << endl;
 
 	return;
 }

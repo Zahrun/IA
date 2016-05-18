@@ -4,6 +4,7 @@
 g++ \*.cpp -std=c++0x -pthread -o IA
 
 pour utiliser eclipse : https://www.fayewilliams.com/2015/04/14/c11-threads-dont-work-in-eclipse-luna/
+plus dans CDT Cross GCC Built-in Compiler Settings mettre "-std=c++0x" apres ${FLAGS} ?
 
 ##### Pour éxecuter (sans le serveur ni le jeu, etc...)
 ./IA localhost 2042

@@ -20,7 +20,6 @@ http://stackoverflow.com/questions/59670/how-to-get-rid-of-deprecated-conversion
 #include <cstring>
 
 #define BUFFER_SIZE 2048
-#define NUMBER_OF_WORDS 14
 
 
 int sockfd;
@@ -113,6 +112,7 @@ void readMessage(char * buffer){
 				cout << "action to send : " << string(temp) << endl;
 				list_action.erase(list_action.begin());
 				sendAction(temp,strlen(temp.c_str()));
+				sendAction(end_turn,strlen(end_turn.c_str()));
 			}
 
 
@@ -246,6 +246,14 @@ void readMessage(char * buffer){
 
 			break;
 
+		case 14 : // winner
+			issBuf >> id;
+			if (id==0){
+				cout << "winner : 0 ... :(" << endl;
+			} else {
+				cout << "winner : 1 ! :)" << endl;
+			}
+
 		default :
 			cout << "message non reconnu : \"" << firstWord << "\" !!!" << endl;
 		}
@@ -309,7 +317,7 @@ void connexion(char * host, int port)
 		cout << "reçu :\"" << buffer << "\"" << endl;
 		readMessage(buffer);
 
-		bzero(buffer, 256);
+		bzero(buffer, BUFFER_SIZE);
 	}
 	close(sockfd);
 }

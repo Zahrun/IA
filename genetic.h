@@ -15,7 +15,7 @@
 using namespace std;
 
 # define POPSIZE 30
-# define MAXGENS 10
+# define MAXGENS 1000
 //# define NVARS 3
 # define PXOVER 0.8
 # define PMUTATION 0.15
