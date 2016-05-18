@@ -32,12 +32,12 @@ using namespace std;
 
 struct genotype
 {
-  vector<int> gene; // on enregistre tous le sdéplacements de chaque unité
-  					  // utilisation d'un vecteur car taille varibale !
-											// soit la liste des k déplacements de chaque unité pour les n prochains tours
-  double fitness;
-  double rfitness;
-  double cfitness;
+	vector<int> gene; // on enregistre tous le sdéplacements de chaque unité
+	// utilisation d'un vecteur car taille varibale !
+	// soit la liste des k déplacements de chaque unité pour les n prochains tours
+	double fitness;
+	double rfitness;
+	double cfitness;
 };
 
 extern case_t temp_map[LONGUEURE_MAP][LARGEUR_MAP];
@@ -48,6 +48,7 @@ extern genotype newpopulation[POPSIZE+1];
 extern vector<string> list_action;
 
 extern bool new_city;
+extern int turn;
 
 void genetic(string);
 
