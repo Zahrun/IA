@@ -726,7 +726,7 @@ void selector ( int &seed ) {
 				population[mem].rfitness;
 	}
 
-	cout << "selector 3" << endl;
+	//cout << "selector 3" << endl;
 
 	//  Select survivors using cumulative fitness.
 	for ( i = 0; i < POPSIZE; i++ ) {
@@ -742,14 +742,14 @@ void selector ( int &seed ) {
 		}
 	}
 
-	cout << "selector 4" << endl;
+	//cout << "selector 4" << endl;
 
 	//  Overwrite the old population with the new one.
 	for ( i = 0; i < POPSIZE; i++ ) {
 		population[i] = newpopulation[i];
 	}
 
-	cout << "selector 5" << endl;
+	//cout << "selector 5" << endl;
 	// TODO : affichage new_pop !
 
 	return;
