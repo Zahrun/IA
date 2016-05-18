@@ -66,7 +66,7 @@ void genetic(string msg){
 
 		if (new_city) {
 
-			display_list_ally_city();
+			//display_list_ally_city();
 
 			temp_string = "set_city_production " + to_string(list_ally_city.back().id) + " " + to_string(0) + "\n";
 
@@ -76,7 +76,7 @@ void genetic(string msg){
 
 		} else if (list_ally_unit.size()) {
 
-			display_list_ally_unit();
+			//display_list_ally_unit();
 			
 			/*cout << "genetic : 1" << endl;
 			temp_string = "move " + to_string(list_ally_unit.back().id) + " " + to_string(1) + "\n";
@@ -272,7 +272,7 @@ void evaluate ( ) {
     for ( tour_num = 0; tour_num < NBTOURS ; tour_num++ ) {
     	for ( unite_num = 0; unite_num < list_ally_unit.size() ; unite_num++ ) {
 
-			display_list_ally_city();
+			//display_list_ally_city();
 			// on récupère les coordonnées de l'unité
 			score_to_add = 0 ;
 			x= temp_list_ally_unit.at(unite_num).x;
