@@ -62,16 +62,16 @@ void genetic(string msg){
 		timestamp ( );		
 
 		turn++;
-
+		cout << "tour : " << to_string(turn) << endl;
 
 		if (new_city) {
 
 			display_list_ally_city();
-			cout << "genetic : 1" << endl;
+
 			temp_string = "set_city_production " + to_string(list_ally_city.back().id) + " " + to_string(0) + "\n";
-			cout << "genetic : 2 and " << temp_string << endl;
+
 			list_action.push_back(temp_string);
-			cout << "genetic : 3" << endl;
+
 			new_city = false;
 
 		} else if (list_ally_unit.size()) {
@@ -85,38 +85,38 @@ void genetic(string msg){
 			cout << "genetic : 3" << endl;*/
 		
 			seed = 123456789;
-			cout << "genetic : 4" << endl;
+
 			initialize(seed);
-			cout << "genetic : 5" << endl;
+
   		evaluate();
-			cout << "genetic : 6" << endl;
+
   		keep_the_best ( );
-			cout << "genetic : 7" << endl;
+
   		for ( generation = 0; generation < MAXGENS; generation++ )
   		{
 				cout << "genetic : " << generation << " - " << "8" << endl;
     		selector ( seed );
-				cout << "genetic : " << generation << " - " << "9" << endl;
+
     		crossover ( seed );
-				cout << "genetic : " << generation << " - " << "10" << endl;
+
     		mutate ( seed );
-				cout << "genetic : " << generation << " - " << "11" << endl;
+
     		//report ( generation );
     		evaluate ( );
-				cout << "genetic : " << generation << " - " << "12" << endl;
+
     		elitist ( );
-				cout << "genetic : " << generation << " - " << "13" << endl;
+
   		}
 			
-			cout << "genetic : 14" << endl;
+
 
 			for(int i=0; i < list_ally_unit.size(); i++) {
-			cout << "genetic : 15" << endl;
+
 				if (population[POPSIZE].gene.at(i) != 6) {
 				temp_string = "move " + to_string(list_ally_unit.at(i).id) + " " + to_string(population[POPSIZE].gene.at(i)) + "\n";
-				cout << "genetic : 16 and " << temp_string << endl;
+
 				list_action.push_back(temp_string);
-				cout << "genetic : 17" << endl;
+
 				}
 			}
 			fin_du_tour = true;
@@ -187,14 +187,19 @@ void elitist ( )
 	best = population[0].fitness;
 	worst = population[0].fitness;
 
+
+
 	for ( i = 0; i < POPSIZE - 1; ++i ) {
 		if ( population[i+1].fitness < population[i].fitness ) {
+
 			if ( best <= population[i].fitness ) {
+
 				best = population[i].fitness;
 				best_mem = i;
 			}
 
 			if ( population[i+1].fitness <= worst ) {
+
 				worst = population[i+1].fitness;
 				worst_mem = i + 1;
 			}
@@ -202,11 +207,13 @@ void elitist ( )
 		} else {
 
 			if ( population[i].fitness <= worst ) {
+
 				worst = population[i].fitness;
 				worst_mem = i;
 			}
 
 			if ( best <= population[i+1].fitness ) {
+
 				best = population[i+1].fitness;
 				best_mem = i + 1;
 			}
@@ -252,25 +259,19 @@ void evaluate ( ) {
   int new_y;
   case_t temp_case;
 
-	cout << "evaluate : 1" << endl;
+
 
   for ( member = 0; member < POPSIZE; member++ ) {
   copy_map(); 								// intialisation de temp_map
   temp_list_ally_unit = list_ally_unit;		// initialisation temp_list_ally_unit
 
-cout << "temp ally unit : " << endl;
-	if (temp_list_ally_unit.size() > 0) {
-		for(int i=0; i < list_ally_unit.size(); i++){
-			cout << "unit " << to_string(temp_list_ally_unit.at(i).unite) << " id : " << to_string(temp_list_ally_unit.at(i).id) << endl;
-		}
-		cout << "ally_unit : ok" << endl;
-	}
+
 
   score =0;
-  	cout << "evaluate : 2" << endl;
+
     for ( tour_num = 0; tour_num < NBTOURS ; tour_num++ ) {
     	for ( unite_num = 0; unite_num < list_ally_unit.size() ; unite_num++ ) {
-			cout << "evaluate : 3 / x : " << to_string(temp_list_ally_unit.at(unite_num).x) << "    y : " << temp_list_ally_unit.at(unite_num).y << endl;
+
 			display_list_ally_city();
 			// on récupère les coordonnées de l'unité
 			score_to_add = 0 ;
@@ -278,7 +279,7 @@ cout << "temp ally unit : " << endl;
 			y= temp_list_ally_unit.at(unite_num).y;
 			new_x =x;
 			new_y =y;
-			cout << "evaluate : 4 : gene size : " << population[member].gene.size() << "  : " << to_string((tour_num)*(list_ally_unit.size())+(unite_num)) << endl;
+
 			switch ( population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num) ) ) {	//TODO : corriger le out of range ici
 			case 0 :
 				new_x++;
@@ -307,63 +308,63 @@ cout << "temp ally unit : " << endl;
 			default :			
 				break;
 			}	
-			cout << "evaluate : 5" << endl;
+
 			if ( !( 0 <= new_x < LARGEUR_MAP) && (0 <= new_y < LONGUEURE_MAP ) ){
-				cout << "evaluate : 6" << endl;
+
 				score_to_add = score_to_add - 10000 ; // on sort de la map, faut surtout pas faire ça malheureux ! 
 			} else {		
-				cout << "evaluate : 7 : " << to_string(cases[new_x][new_y].terrain) << endl;	
+
 			// on regarde à chaque tour si le déplacement rapporte des points
 				// on va essayer de pondérer pour qu'une action rapporte plus de points faite maintenant que à 5 tours
 				temp_case = cases[new_x][new_y];
-				cout << "evaluate : 8" << endl;
+
 				if ( temp_case.unite != ' ' && temp_case.unite != 'O' && temp_case.owner == 1 ) {
-					cout << "evaluate : 9" << endl;
+
 					score_to_add = score_to_add - 100 ; // on attaque sa propre unité, c'est mal !			cout << "evaluate : 1" << endl;
 				}
 				
 				else if ( temp_case.terrain == 0 ) {
-					cout << "evaluate : 10" << endl;
-					score_to_add = score_to_add - 25 ; // unité se noie, pas tip top...
-					cout << "evaluate : 11" << endl;
+
+					score_to_add = score_to_add - 250 ; // unité se noie, pas tip top...
+
 				}
 				
 				 else if ( temp_case.unite == 'O' && temp_case.owner == 0 ) {
-					cout << "evaluate : 12" << endl;
+
 					score_to_add = score_to_add + PTS_ATTAQUE_VILLE_ENNEMIE;
-					cout << "evaluate : 13" << endl;
+
 				}
 		
 				else if ( temp_case.unite == '0' && temp_case.owner == -1 ) {
-					cout << "evaluate : 14" << endl;
+
 					score_to_add = score_to_add + PTS_ATTAQUE_VILLE_NEUTRE;
-					cout << "evaluate : 15" << endl;
+
 				}
 		
 				else if ( temp_case.visible == -1 ) { 
 					score_to_add = score_to_add + PTS_DECOUVERTE_TERRAIN ;
-					cout << "evaluate : 16" << endl;
+
 				}
 		
 				else if ( temp_case.visible == 0 ) { 
-					cout << "evaluate : 17" << endl;
+
 					score_to_add = score_to_add + PTS_VISION_TERRAIN ; 
-					cout << "evaluate : 18" << endl;
+
 					// pour le moment la vision à 2 cases d'une army est négligée...
 				}				
-					cout << "evaluate : 19" << endl;
+
 				 score = score + pow(score_to_add ,((NBTOURS+1-tour_num)/NBTOURS)) ;
-				cout << "evaluate : 20" << endl;
+
 				// TODO : on met à jour la matrice temporaire de donnée   
 				temp_map[x][y].unite = ' ';
 				temp_map[new_x][new_y].unite = 'A';
-				cout << "evaluate : 21" << endl;
+
     		}
     		
     	}
     } 
   population[member].fitness = (int)score ; 
-	cout << "evaluate : 22" << endl;
+
   }
   
 // Possibilité d'insérer un affichage global de notre population avec leur score !

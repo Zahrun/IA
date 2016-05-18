@@ -15,7 +15,7 @@
 using namespace std;
 
 # define POPSIZE 30
-# define MAXGENS 1000
+# define MAXGENS 200
 //# define NVARS 3
 # define PXOVER 0.8
 # define PMUTATION 0.15
@@ -29,7 +29,7 @@ using namespace std;
 # define PTS_UNITE_DANS_LEAU -10
 
 # define LBOUND 0
-# define UBOUND 6 // mouvement possibles numérotés de 0 à 5 ( D,Z,A,Q,X,C) ( -> le 7ème mouvement étant de ne pas bouger la pièce ! Qui peut parfois être le meilleur coup à jouer)
+# define UBOUND 5 // mouvement possibles numérotés de 0 à 5 ( D,Z,A,Q,X,C) ( -> le 7ème mouvement étant de ne pas bouger la pièce ! Qui peut parfois être le meilleur coup à jouer)
 
 struct genotype
 {
