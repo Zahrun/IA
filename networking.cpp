@@ -257,6 +257,7 @@ void readMessage(char * buffer){
 			} else {
 				cout << "winner : 1 ! :)" << endl;
 			}
+			break;
 
 		default :
 			cout << "message non reconnu : \"" << firstWord << "\" !!!" << endl;

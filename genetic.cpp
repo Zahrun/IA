@@ -64,66 +64,71 @@ void genetic(string msg){
 		turn++;
 		cout << "tour : " << to_string(turn) << endl;
 
-		 if (list_ally_unit.size()) {
+		if (list_ally_unit.size()) {
 
 			//display_list_ally_unit();
-			
+
 			/*cout << "genetic : 1" << endl;
 			temp_string = "move " + to_string(list_ally_unit.back().id) + " " + to_string(1) + "\n";
 			cout << "genetic : 2 and " << temp_string << endl;
 			list_action.push_back(temp_string);
 			cout << "genetic : 3" << endl;*/
-		
+
 			seed = 123456789;
 
 			initialize(seed);
 
-  		evaluate();
+			evaluate();
 
-  		keep_the_best ( );
+			keep_the_best ( );
 
-  		for ( generation = 0; generation < MAXGENS; generation++ )
-  		{
+			for ( generation = 0; generation < MAXGENS; generation++ )
+			{
 				//cout << "genetic : " << generation << " - " << "8" << endl;
-    		selector ( seed );
 
-    		crossover ( seed );
+				cout << "selector" << endl;
+				selector ( seed );
+				cout << "crossover" << endl;
+				crossover ( seed );
 
-    		mutate ( seed );
+				cout << "mutate" << endl;
+				mutate ( seed );
 
-    		//report ( generation );
-    		evaluate ( );
+				cout << "evaluate" << endl;
+				//report ( generation );
+				evaluate ( );
 
-    		elitist ( );
+				cout << "elistist" << endl;
+				elitist ( );
 
-  		}
-			
+			}
+
 
 
 			for(int i=0; i < list_ally_unit.size(); i++) {
 
 				if (population[POPSIZE].gene.at(i) != 6) {
-				temp_string = "move " + to_string(list_ally_unit.at(i).id) + " " + to_string(population[POPSIZE].gene.at(i)) + "\n";
+					temp_string = "move " + to_string(list_ally_unit.at(i).id) + " " + to_string(population[POPSIZE].gene.at(i)) + "\n";
 
-				list_action.push_back(temp_string);
+					list_action.push_back(temp_string);
 
 				}
 			}
 			fin_du_tour = true;
 
 		}		
-	
+
 		//usleep(500000); // simulation de décision d'action
 
-			//for(int i=0; i < population[POPSIZE].gene.size()-1; i++) {
-			/*for(int i=0; i < 1; i++) {
+		//for(int i=0; i < population[POPSIZE].gene.size()-1; i++) {
+		/*for(int i=0; i < 1; i++) {
 				string action = "move " + to_string(list_ally_unit.at(i).id) + " " + to_string(population[POPSIZE].gene.at(i)) + "\n";
 				cout << "action " << i << " : " << action << endl;
 				cout << "gene size : " << population[POPSIZE].gene.size() << endl;
 				cout << "number of ally units " << list_ally_unit.size() << endl;
 				list_action.push_back(action);
 			}*/
-	
+
 
 		timestamp ( );
 
@@ -236,150 +241,150 @@ void elitist ( )
 
 void evaluate ( ) {
 
-  int member;
-  int i;
-  int unite_num;
-  int tour_num;
-  double score ;
-  int score_to_add ;
-  //double x[NVARS+1];
-  int x;
-  int y;
-  int new_x;
-  int new_y;
-  case_t temp_case;
+	int member;
+	int i;
+	int unite_num;
+	int tour_num;
+	double score ;
+	int score_to_add ;
+	//double x[NVARS+1];
+	int x;
+	int y;
+	int new_x;
+	int new_y;
+	case_t temp_case;
 
 
 
-  for ( member = 0; member < POPSIZE; member++ ) {
-  copy_map(); 								// intialisation de temp_map
-  temp_list_ally_unit = list_ally_unit;		// initialisation temp_list_ally_unit
+	for ( member = 0; member < POPSIZE; member++ ) {
+		copy_map(); 								// intialisation de temp_map
+		temp_list_ally_unit = list_ally_unit;		// initialisation temp_list_ally_unit
 
 
 
-  score =0;
+		score =0;
 
-    for ( tour_num = 0; tour_num < NBTOURS ; tour_num++ ) {
-    	for ( unite_num = 0; unite_num < list_ally_unit.size() ; unite_num++ ) {
+		for ( tour_num = 0; tour_num < NBTOURS ; tour_num++ ) {
+			for ( unite_num = 0; unite_num < list_ally_unit.size() ; unite_num++ ) {
 
-			//display_list_ally_city();
-			// on récupère les coordonnées de l'unité
-			score_to_add = 0 ;
-			x= temp_list_ally_unit.at(unite_num).x;
-			y= temp_list_ally_unit.at(unite_num).y;
-			new_x =x;
-			new_y =y;
+				//display_list_ally_city();
+				// on récupère les coordonnées de l'unité
+				score_to_add = 0 ;
+				x= temp_list_ally_unit.at(unite_num).x;
+				y= temp_list_ally_unit.at(unite_num).y;
+				new_x =x;
+				new_y =y;
 
-			do {
-			switch ( population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num) ) ) {	
-			case 0 :
-				new_x++;
-				break;
-			case 1 :
-				new_y--;
-				break;
-			case 2 :
-				new_x--;
-				new_y--;
-				break;
-			case 3 :
-				new_x--;
-				break;
-			case 4 :
-				new_y++;
-				break;
-			case 5 :
-				new_x++;
-				new_y++;
-				break;
-			case 6 :
-				// on ne fait rien
-				// la pièce ne bouge pas!
-				break;
-			default :			
-				break;
-			}	
+				do {
+					switch ( population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num) ) ) {
+					case 0 :
+						new_x++;
+						break;
+					case 1 :
+						new_y--;
+						break;
+					case 2 :
+						new_x--;
+						new_y--;
+						break;
+					case 3 :
+						new_x--;
+						break;
+					case 4 :
+						new_y++;
+						break;
+					case 5 :
+						new_x++;
+						new_y++;
+						break;
+					case 6 :
+						// on ne fait rien
+						// la pièce ne bouge pas!
+						break;
+					default :
+						break;
+					}
 
-			if ( !( 0 <= new_x && new_x < LARGEUR_MAP) && (0 <= new_y && new_y < LONGUEURE_MAP ) ){
-					population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
-					continue;
-		
-				
-				//score_to_add = score_to_add - 10000 ; // on sort de la map, faut surtout pas faire ça malheureux ! 
-			} else {		
+					if ( !( 0 <= new_x && new_x < LARGEUR_MAP) && (0 <= new_y && new_y < LONGUEURE_MAP ) ){
+						population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
+						continue;
 
-			// on regarde à chaque tour si le déplacement rapporte des points
-				// on va essayer de pondérer pour qu'une action rapporte plus de points faite maintenant que à 5 tours
-				temp_case = cases[new_x][new_y];
 
-				if (x==new_x and y == new_y){
+						//score_to_add = score_to_add - 10000 ; // on sort de la map, faut surtout pas faire ça malheureux !
+					} else {
 
-				}
-				else if ( temp_case.unite == 2 && temp_case.owner == 1 ) {
-					population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
-					continue;
-				}
-				
-				else if ( temp_case.terrain == 0 ) {
-					population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
-					continue;
-					//score_to_add = score_to_add - 2500 ; // unité se noie, pas tip top...
+						// on regarde à chaque tour si le déplacement rapporte des points
+						// on va essayer de pondérer pour qu'une action rapporte plus de points faite maintenant que à 5 tours
+						temp_case = cases[new_x][new_y];
 
-				}
-				
-				 else if ( temp_case.unite == 1 && temp_case.owner == 0 ) {
+						if (x==new_x and y == new_y){
 
-					score_to_add = score_to_add + PTS_ATTAQUE_VILLE_ENNEMIE;
+						}
+						else if ( temp_case.unite == 2 && temp_case.owner == 1 ) {
+							population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
+							continue;
+						}
 
-				}
-		
-				else if ( temp_case.unite == 1 && temp_case.owner == -1 ) {
+						else if ( temp_case.terrain == 0 ) {
+							population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
+							continue;
+							//score_to_add = score_to_add - 2500 ; // unité se noie, pas tip top...
 
-					score_to_add = score_to_add + PTS_ATTAQUE_VILLE_NEUTRE;
+						}
 
-				}
+						else if ( temp_case.unite == 1 && temp_case.owner == 0 ) {
 
-				else if ( temp_case.unite == 1 && temp_case.owner == 1 ) {
+							score_to_add = score_to_add + PTS_ATTAQUE_VILLE_ENNEMIE;
 
-					score_to_add = score_to_add - 50;
+						}
 
-				}
-		
-				else if ( temp_case.visible == -1 ) { 
-					score_to_add = score_to_add + PTS_DECOUVERTE_TERRAIN ;
+						else if ( temp_case.unite == 1 && temp_case.owner == -1 ) {
 
-				}
-		
-				else if ( temp_case.visible == 0 ) { 
+							score_to_add = score_to_add + PTS_ATTAQUE_VILLE_NEUTRE;
 
-					score_to_add = score_to_add + PTS_VISION_TERRAIN ; 
+						}
 
-					// pour le moment la vision à 2 cases d'une army est négligée...
-				}
+						else if ( temp_case.unite == 1 && temp_case.owner == 1 ) {
 
-				
+							score_to_add = score_to_add - 50;
 
-				 score = score + pow(score_to_add ,((NBTOURS+1-tour_num)/NBTOURS)) ;
+						}
 
-				// TODO : on met à jour la matrice temporaire de donnée   
-				if (temp_map[x][y].unite == 2){temp_map[x][y].unite = -1;};
-				temp_map[new_x][new_y].unite = 2;
+						else if ( temp_case.visible == -1 ) {
+							score_to_add = score_to_add + PTS_DECOUVERTE_TERRAIN ;
 
-				temp_list_ally_unit.at(unite_num).x = new_x;
-				temp_list_ally_unit.at(unite_num).y = new_y;
+						}
 
-    		}
-    	}while(0);
-    	}
-    } 
-  population[member].fitness = (int)score ; 
+						else if ( temp_case.visible == 0 ) {
 
-  }
-  
-// Possibilité d'insérer un affichage global de notre population avec leur score !
-  
-  return;
-/*
+							score_to_add = score_to_add + PTS_VISION_TERRAIN ;
+
+							// pour le moment la vision à 2 cases d'une army est négligée...
+						}
+
+
+
+						score = score + pow(score_to_add ,((NBTOURS+1-tour_num)/NBTOURS)) ;
+
+						// TODO : on met à jour la matrice temporaire de donnée
+						if (temp_map[x][y].unite == 2){temp_map[x][y].unite = -1;};
+						temp_map[new_x][new_y].unite = 2;
+
+						temp_list_ally_unit.at(unite_num).x = new_x;
+						temp_list_ally_unit.at(unite_num).y = new_y;
+
+					}
+				}while(0);
+			}
+		}
+		population[member].fitness = (int)score ;
+
+	}
+
+	// Possibilité d'insérer un affichage global de notre population avec leur score !
+
+	return;
+	/*
 	int member;
 	int i;
 	int unite_num;
@@ -484,7 +489,7 @@ void evaluate ( ) {
 	// Possibilité d'insérer un affichage global de notre population avec leur score !
 
 	return;
-*/
+	 */
 }
 
 
@@ -523,7 +528,7 @@ int i4_uniform_ab ( int a, int b, int &seed ) {
 
 	//  Scale R to lie between A-0.5 and B+0.5.
 	r = ( 1.0 - r ) * ( ( float ) a - 0.5 )
-    				+         r   * ( ( float ) b + 0.5 );
+    						+         r   * ( ( float ) b + 0.5 );
 
 	//  Use rounding to convert R to an integer between A and B.
 	value = round ( r );
@@ -707,11 +712,13 @@ void selector ( int &seed ) {
 		sum = sum + population[mem].fitness;
 	}
 
+	//cout << "selector 1" << endl;
 	//  Calculate the relative fitness of each member. ( moyenne )
 	for ( mem = 0; mem < POPSIZE; mem++ ) {
 		population[mem].rfitness = population[mem].fitness / sum;
 	}
 
+	//cout << "selector 2" << endl;
 	//  Calculate the cumulative fitness.
 	population[0].cfitness = population[0].rfitness;
 	for ( mem = 1; mem < POPSIZE; mem++ ) {
@@ -719,13 +726,15 @@ void selector ( int &seed ) {
 				population[mem].rfitness;
 	}
 
+	cout << "selector 3" << endl;
+
 	//  Select survivors using cumulative fitness.
 	for ( i = 0; i < POPSIZE; i++ ) {
 		p = r8_uniform_ab ( a, b, seed );
 		if ( p < population[0].cfitness ) {
 			newpopulation[i] = population[0];
 		} else {
-			for ( j = 0; j < POPSIZE; j++ ) {
+			for ( j = 0; j < POPSIZE-1; j ++ ) {
 				if ( population[j].cfitness <= p && p < population[j+1].cfitness ) {
 					newpopulation[i] = population[j+1];
 				}
@@ -733,11 +742,14 @@ void selector ( int &seed ) {
 		}
 	}
 
+	cout << "selector 4" << endl;
+
 	//  Overwrite the old population with the new one.
 	for ( i = 0; i < POPSIZE; i++ ) {
 		population[i] = newpopulation[i];
 	}
 
+	cout << "selector 5" << endl;
 	// TODO : affichage new_pop !
 
 	return;
