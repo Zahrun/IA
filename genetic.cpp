@@ -346,13 +346,17 @@ void evaluate ( ) {
 
 						else if ( temp_case.unite == 1 && temp_case.owner == 1 ) {
 
-							score_to_add = score_to_add - 50;
+							score_to_add = score_to_add - PTS_CANNIBAL;
 
 						}
 
 						else if ( temp_case.visible == -1 ) {
 							score_to_add = score_to_add + PTS_DECOUVERTE_TERRAIN ;
 
+						}
+
+						else if (temp_case.owner == 0){
+							score_to_add += PTS_ATTAQUE_ENNEMI;
 						}
 
 						else if ( temp_case.visible == 0 ) {
