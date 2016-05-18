@@ -10,11 +10,12 @@
 
 #include "globals.h"
 #include "data.h"
+#include "networking.h"
 
 using namespace std;
 
 # define POPSIZE 30
-# define MAXGENS 1000
+# define MAXGENS 10
 //# define NVARS 3
 # define PXOVER 0.8
 # define PMUTATION 0.15

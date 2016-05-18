@@ -95,10 +95,15 @@ void genetic(string msg){
 				elitist ( );
 			}
 
-			for(int i=0; i < population[POPSIZE].gene.size(); i++) {
+			//for(int i=0; i < population[POPSIZE].gene.size()-1; i++) {
+			for(int i=0; i < 1; i++) {
 				string action = "move " + to_string(list_ally_unit.at(i).id) + " " + to_string(population[POPSIZE].gene.at(i)) + "\n";
+				cout << "action " << i << " : " << action << endl;
+				cout << "gene size : " << population[POPSIZE].gene.size() << endl;
+				cout << "number of ally units " << list_ally_unit.size() << endl;
 				list_action.push_back(action);
 			}
+			list_action.push_back(end_turn); // on finit le tour car les units peuvent plus bouger
 		}		
 
 		timestamp ( );
