@@ -72,7 +72,7 @@ void genetic(string msg){
 			cout << "genetic : 3" << endl;
 			new_city = false;
 		} else if (turn > 6) {
-<<<<<<< HEAD
+
 			display_list_ally_unit();
 
 		
@@ -227,7 +227,7 @@ void elitist ( )
 //****************************************************************************
 
 void evaluate ( ) {
-<<<<<<< HEAD
+
   int member;
   int i;
   int unite_num;
