@@ -20,7 +20,7 @@ using namespace std;
 # define PXOVER 0.8
 # define PMUTATION 0.15
 
-# define NBTOURS 3
+# define NBTOURS 10
 
 # define PTS_ATTAQUE_VILLE_ENNEMIE 150
 # define PTS_ATTAQUE_VILLE_NEUTRE 100
@@ -29,7 +29,7 @@ using namespace std;
 # define PTS_UNITE_DANS_LEAU -10
 
 # define LBOUND 0
-# define UBOUND 5 // mouvement possibles numérotés de 0 à 5 ( D,Z,A,Q,X,C) ( -> le 7ème mouvement étant de ne pas bouger la pièce ! Qui peut parfois être le meilleur coup à jouer)
+# define UBOUND 6 // mouvement possibles numérotés de 0 à 5 ( D,Z,A,Q,X,C) ( -> le 7ème mouvement étant de ne pas bouger la pièce ! Qui peut parfois être le meilleur coup à jouer)
 
 struct genotype
 {

@@ -20,8 +20,8 @@
 
 using namespace std;
 
-#define LONGUEURE_MAP 30
-#define LARGEUR_MAP 30
+#define LONGUEURE_MAP 20
+#define LARGEUR_MAP 20
 #define NUMBER_OF_WORDS 15
 
 extern sem_t sem_attente_decision_IA;

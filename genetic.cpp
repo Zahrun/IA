@@ -84,7 +84,7 @@ void genetic(string msg){
 
   		for ( generation = 0; generation < MAXGENS; generation++ )
   		{
-				cout << "genetic : " << generation << " - " << "8" << endl;
+				//cout << "genetic : " << generation << " - " << "8" << endl;
     		selector ( seed );
 
     		crossover ( seed );
@@ -312,7 +312,10 @@ void evaluate ( ) {
 				// on va essayer de pondérer pour qu'une action rapporte plus de points faite maintenant que à 5 tours
 				temp_case = cases[new_x][new_y];
 
-				if ( temp_case.unite == 2 && temp_case.owner == 1 ) {
+				if (x==new_x and y == new_y){
+
+				}
+				else if ( temp_case.unite == 2 && temp_case.owner == 1 ) {
 					population[member].gene.at( (tour_num)*(list_ally_unit.size())+(unite_num)) =	i4_uniform_ab ( LBOUND, UBOUND, seed );
 					continue;
 				}
