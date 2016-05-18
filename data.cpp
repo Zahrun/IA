@@ -157,9 +157,10 @@ void display_list_ally_city() {
 void display_list_ally_unit() {
 	cout << "ally unit : " << endl;
 	if (list_ally_unit.size() > 0) {
-		for(int i=0; i < list_ally_city.size(); i++){
-			cout << "city " << list_ally_unit.at(i).unite << " id : " << to_string(list_ally_unit.at(i).id) << endl;
+		for(int i=0; i < list_ally_unit.size(); i++){
+			cout << "unit " << to_string(list_ally_unit.at(i).unite) << " id : " << to_string(list_ally_unit.at(i).id) << endl;
 		}
+		cout << "ally_unit : ok" << endl;
 	}
 }
 
