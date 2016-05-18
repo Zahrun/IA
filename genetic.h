@@ -20,7 +20,7 @@ using namespace std;
 # define PXOVER 0.8
 # define PMUTATION 0.15
 
-# define NBTOURS 1
+# define NBTOURS 3
 
 # define PTS_ATTAQUE_VILLE_ENNEMIE 150
 # define PTS_ATTAQUE_VILLE_NEUTRE 100

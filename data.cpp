@@ -117,6 +117,7 @@ void add_city(int id, int owner, int x, int y) {
 }
 
 void add_ally_city(int id, int owner, int x, int y){
+	string temp_string;
 	city temp_city;
 	bool found = false;
 	cout << "add ally city : 1" << endl;
@@ -134,6 +135,10 @@ void add_ally_city(int id, int owner, int x, int y){
 		temp_city.x = x;
 		temp_city.y = y;
 		list_ally_city.push_back(temp_city);
+
+		temp_string = "set_city_production " + to_string(list_ally_city.back().id) + " " + to_string(0) + "\n";
+
+		list_action.push_back(temp_string);
 	}
 }
 

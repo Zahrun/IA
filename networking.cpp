@@ -138,7 +138,7 @@ void readMessage(char * buffer){
 			issBuf >> unite;
 			cout << "unite : " << string(unite) << endl;
 			if (unite=="none"){
-				cases[x][y].unite=' ';
+				cases[x][y].unite=-1;
 				if (cases[x][y].visible == -1) { // terrain n'était pas découvert du tout
 					cases[x][y].visible = 1;}
 				else if ( cases[x][y].visible == 0) { // terrain était en ombre
@@ -147,14 +147,14 @@ void readMessage(char * buffer){
 					cases[x][y].visible = 0; } // vraiment avec set visible ??????????
 			}
 			else if (unite=="city"){ // ville prise par aucun joueur
-				cases[x][y].unite='O';
+				cases[x][y].unite=1;
 				cases[x][y].owner=-1;
 				issBuf >> id;
 				issBuf >> owner;
 				add_city(id, owner, x, y);
 			}
 			else if (unite=="owned_city"){ // ville prise par un joueur
-				cases[x][y].unite='O';
+				cases[x][y].unite=1;
 				issBuf >> id;
 				cases[x][y].id=id;
 				issBuf >> owner; // dans le code du prof : 0 = joueur 0 et 1 = joueur 1;
@@ -168,7 +168,7 @@ void readMessage(char * buffer){
 				issBuf >> owner; // C'est le numero de joueur ( 0 | 1 )
 				cases[x][y].owner=owner;
 				issBuf >> piece_symbol; // bien le char représentant l'unité
-				cases[x][y].unite=piece_symbol;
+				cases[x][y].unite=2;
 				issBuf >> id;
 				cases[x][y].id=id;
 				issBuf >> piece_type;} // pas besoin ( si symbole fonctionne... ) => symbole est implémenté correctement
