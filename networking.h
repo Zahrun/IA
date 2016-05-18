@@ -12,7 +12,7 @@
 
 using namespace std;
 
-
+extern string end_turn;
 
 void connexion(char * host, int port);
 void readDescription(char * buffer);
